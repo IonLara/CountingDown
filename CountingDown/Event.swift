@@ -13,8 +13,12 @@ struct Event: Codable{
     var title: String
     var isFavorite: Bool
     var date: Date
-//    var color: UIColor
-//    var image: UIImage
+    var hasImage: Bool = false
+    var colorR: Double = 0.0
+    var colorB: Double = 0.0
+    var colorG: Double = 0.0
+    var colorA: Double = 0.0
+    var imageAddress: String = ""
     var isAllDay: Bool
     var tasks: [Task]
     var notes: String?

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="YOt-ex-oOF">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -67,27 +66,54 @@
         <!--My Events-->
         <scene sceneID="JdG-90-WNm">
             <objects>
-                <collectionViewController id="d7I-k9-D01" sceneMemberID="viewController">
+                <collectionViewController id="d7I-k9-D01" customClass="EventCollectionViewController" customModule="CountingDown" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="nxB-J2-1Q8">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Y5J-Uu-8op">
-                            <size key="itemSize" width="128" height="128"/>
+                            <size key="itemSize" width="165" height="165"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="HPw-Z6-f9p">
-                                <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="EventCell" id="HPw-Z6-f9p" customClass="EventCollectionViewCell" customModule="CountingDown" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="MQ4-oN-R8k">
-                                    <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Event Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D2k-TU-5bg">
+                                            <rect key="frame" x="14" y="23" width="136" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hC4-De-WhL">
+                                            <rect key="frame" x="0.0" y="66" width="165" height="36"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Days Left" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hBg-6T-91i">
+                                            <rect key="frame" x="29" y="110" width="107" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </collectionViewCellContentView>
+                                <size key="customSize" width="165" height="165"/>
                                 <connections>
-                                    <segue destination="HHM-DK-cqs" kind="show" id="7Dd-hW-QcR"/>
+                                    <outlet property="nameLabel" destination="D2k-TU-5bg" id="UQ7-C4-O8h"/>
+                                    <outlet property="numberLabel" destination="hC4-De-WhL" id="Lle-Mn-hu9"/>
+                                    <outlet property="remainderLabel" destination="hBg-6T-91i" id="V9H-PL-LMn"/>
+                                    <segue destination="HHM-DK-cqs" kind="show" destinationCreationSelector="showEventDetail:sender:" id="7Dd-hW-QcR"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -100,25 +126,25 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GZ0-UJ-z8O" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3062" y="-468"/>
+            <point key="canvasLocation" x="3061.8320610687024" y="-468.3098591549296"/>
         </scene>
-        <!--View Controller-->
+        <!--Event Detail View Controller-->
         <scene sceneID="RWg-Tx-XoO">
             <objects>
-                <viewController id="HHM-DK-cqs" sceneMemberID="viewController">
+                <viewController id="HHM-DK-cqs" customClass="EventDetailViewController" customModule="CountingDown" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XDw-Pv-4BS">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="O6u-vi-WCn">
-                                <rect key="frame" x="16" y="87" width="361" height="666"/>
+                                <rect key="frame" x="16" y="119" width="361" height="634"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DYu-9A-vIV">
-                                        <rect key="frame" x="0.0" y="1.6666666666666572" width="361" height="358"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="361"/>
+                                        <color key="backgroundColor" red="0.65098039215686276" green="0.89351522770994596" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="DYu-9A-vIV" secondAttribute="height" multiplier="1:1" id="2Ee-UQ-LX4"/>
                                         </constraints>
-                                        <imageReference key="image" image="photo" catalog="system" symbolScale="default" variableValue="5.5511151231257827e-17"/>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="81" translatesAutoresizingMaskIntoConstraints="NO" id="AWa-0M-e2e">
                                         <rect key="frame" x="0.0" y="384" width="361" height="41.333333333333314"/>
@@ -138,12 +164,14 @@
                                                 <state key="selected" image="star.fill" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
                                                 </state>
+                                                <connections>
+                                                    <action selector="favoriteTapped:" destination="HHM-DK-cqs" eventType="touchUpInside" id="nsl-8k-kVQ"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hlQ-1V-iLD">
-                                        <rect key="frame" x="0.0" y="448.33333333333343" width="361" height="217.66666666666669"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hlQ-1V-iLD">
+                                        <rect key="frame" x="0.0" y="448.33333333333343" width="361" height="185.66666666666669"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="InfoCell" textLabel="g1f-d6-OG1" detailTextLabel="TXD-c8-fQP" style="IBUITableViewCellStyleValue1" id="ZSs-Ol-vbQ">
                                                 <rect key="frame" x="0.0" y="50" width="361" height="43.666667938232422"/>
@@ -184,7 +212,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9ud-zp-trs">
-                                                            <rect key="frame" x="314" y="4" width="35" height="35"/>
+                                                            <rect key="frame" x="306" y="2" width="35" height="35"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                     </subviews>
@@ -219,14 +247,20 @@
                             <constraint firstItem="MnL-b0-5N9" firstAttribute="bottom" secondItem="O6u-vi-WCn" secondAttribute="bottom" constant="16" id="EbE-Jl-1C0"/>
                             <constraint firstItem="O6u-vi-WCn" firstAttribute="leading" secondItem="MnL-b0-5N9" secondAttribute="leading" constant="16" id="Lir-xW-rky"/>
                             <constraint firstItem="MnL-b0-5N9" firstAttribute="trailing" secondItem="O6u-vi-WCn" secondAttribute="trailing" constant="16" id="ktB-gt-4x2"/>
-                            <constraint firstItem="MnL-b0-5N9" firstAttribute="top" secondItem="O6u-vi-WCn" secondAttribute="top" constant="16" id="tN8-1B-lcX"/>
+                            <constraint firstItem="MnL-b0-5N9" firstAttribute="top" secondItem="O6u-vi-WCn" secondAttribute="top" constant="-16" id="tN8-1B-lcX"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="UHz-gn-5C4"/>
+                    <connections>
+                        <outlet property="eventImage" destination="DYu-9A-vIV" id="y0n-C5-psg"/>
+                        <outlet property="favoriteButton" destination="Zm6-KS-rdk" id="wx7-cV-jbN"/>
+                        <outlet property="nameLabel" destination="RSi-cv-tQ8" id="oam-ay-sV4"/>
+                        <outlet property="tableView" destination="hlQ-1V-iLD" id="S2p-LC-sIZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YEo-El-a3K" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3908" y="-468"/>
+            <point key="canvasLocation" x="3907.6335877862593" y="-468.3098591549296"/>
         </scene>
         <!--Edit View-->
         <scene sceneID="ecq-sY-WYb">
@@ -283,7 +317,6 @@
     </scenes>
     <resources>
         <image name="circle" catalog="system" width="128" height="123"/>
-        <image name="photo" catalog="system" width="128" height="93"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="systemBackgroundColor">

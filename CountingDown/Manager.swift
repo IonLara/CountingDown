@@ -31,18 +31,18 @@ struct Manager: Codable {
         var year = Calendar.current.component(.year, from: Date())
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        var date = formatter.date(from: "\(year)/12/25 13:00")
+        var date = formatter.date(from: "\(year)/12/25 00:00")
         if date! < Date() {
             year += 1
-            date = formatter.date(from: "\(year)/12/25 13:00")
+            date = formatter.date(from: "\(year)/12/25 00:00")
         }
-        events.append(Event(title: "Christmas", isFavorite: false, date: date!, isAllDay: true, tasks: [], notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
-        date = formatter.date(from: "\(year)/11/01 20:00")
+        events.append(Event(title: "Christmas", isFavorite: false, date: date!, colorR: 1, colorA: 1, isAllDay: true, tasks: [], notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
+        date = formatter.date(from: "\(year)/10/31 00:00")
         if date! < Date() {
             year += 1
-            date = formatter.date(from: "\(year)/11/01 20:00")
+            date = formatter.date(from: "\(year)/10/31 00:00")
         }
-        events.append(Event(title: "Halloween", isFavorite: false, date: date!, isAllDay: true, tasks: [], notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
+        events.append(Event(title: "Halloween", isFavorite: false, date: date!, colorR: 1, colorG: 0.5, colorA: 1, isAllDay: true, tasks: [], notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
         
         return events
     }
