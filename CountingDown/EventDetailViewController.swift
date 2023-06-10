@@ -23,11 +23,17 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var remainLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
+    var timer = Timer()
+    
     @IBAction func favoriteTapped(_ sender: UIButton) {
         event.isFavorite.toggle()
         favoriteButton.isSelected = event.isFavorite
         
         delegate.toggleFavorite(index)
+    }
+    
+    func updater() {
+        updateRemain()
     }
     
     func getTimeLeft() -> (Int, Int, Int, Int) {
@@ -54,11 +60,18 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            self.updater()
+        })
         
         eventImage.layer.cornerRadius = 20.0
         eventImage.clipsToBounds = true
         if event.hasImage == false {
             eventImage.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+        } else if event.isImageIncluded == true {
+            eventImage.image = UIImage(named: event.imageAddress)
+        } else {
+            //Add code to get image from user's phone
         }
         nameLabel.text = event.title
         favoriteButton.isSelected = event.isFavorite
@@ -67,6 +80,10 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.delegate = self
         
         updateRemain()
+        
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        timer.invalidate()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -99,8 +116,16 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         case [1,0]:
             return tableView.dequeueReusableCell(withIdentifier: "AddCell", for: indexPath)
         default:
-            return  tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
-            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NotesCell", for: indexPath)
+            var content = cell.defaultContentConfiguration()
+            if let notes = event.notes {
+                content.text = notes
+            } else {
+                content.text = "No notes"
+                content.textProperties.color = .darkGray
+            }
+            cell.contentConfiguration = content
+            return cell
         }
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

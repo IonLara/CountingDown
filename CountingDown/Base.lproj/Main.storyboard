@@ -142,7 +142,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="O6u-vi-WCn">
                                 <rect key="frame" x="16" y="119" width="361" height="634"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DYu-9A-vIV">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DYu-9A-vIV">
                                         <rect key="frame" x="0.0" y="0.0" width="361" height="228"/>
                                         <color key="backgroundColor" red="0.65098039215686276" green="0.89351522770994596" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>

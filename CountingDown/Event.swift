@@ -19,6 +19,7 @@ struct Event: Codable{
     var colorG: Double = 0.0
     var colorA: Double = 0.0
     var imageAddress: String = ""
+    var isImageIncluded: Bool
     var isAllDay: Bool
     var tasks: [Task]
     var notes: String?
