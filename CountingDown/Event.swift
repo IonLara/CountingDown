@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-class Event: Codable{
+class Event: Codable, Equatable{
+    let id: UUID
     
     var title: String
     var isFavorite: Bool
@@ -29,7 +30,12 @@ class Event: Codable{
     var firstAlarm: AlarmTime
     var secondAlarm: AlarmTime
     
+    static func ==(lhs: Event, rhs: Event) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     init(title: String, isFavorite: Bool, date: Date, hasImage: Bool, colorR: Double, colorB: Double, colorG: Double, colorA: Double, imageAddress: String, isImageIncluded: Bool, isAllDay: Bool, tasks: [Task], notes: String? = nil, notifications: NotificationCadency, firstAlarm: AlarmTime, secondAlarm: AlarmTime) {
+        self.id = UUID()
         self.title = title
         self.isFavorite = isFavorite
         self.date = date

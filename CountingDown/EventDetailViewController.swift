@@ -8,7 +8,7 @@
 import UIKit
 
 protocol EventDelegate {
-    func toggleFavorite(_ index: Int)
+    func toggleFavorite(_ index: Int, _ adding: Bool)
 }
 
 class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -29,7 +29,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         event.isFavorite.toggle()
         favoriteButton.isSelected = event.isFavorite
         
-        delegate.toggleFavorite(index)
+        delegate.toggleFavorite(index, event.isFavorite)
     }
     
     func updater() {

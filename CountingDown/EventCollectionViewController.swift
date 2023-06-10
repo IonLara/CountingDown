@@ -26,8 +26,15 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
         collectionView.collectionViewLayout = createLayout()
     }
     
-    func toggleFavorite(_ index: Int) {
-        events[index].isFavorite.toggle()
+    func toggleFavorite(_ index: Int, _ adding: Bool) {
+        if adding {
+            favorites.append(events[index])
+        } else {
+            if let i = favorites.firstIndex(of: events[index]) {
+                favorites.remove(at: i)
+            }
+        }
+
         collectionView.reloadData()
     }
     
@@ -74,9 +81,13 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
     @IBSegueAction func showEventDetail(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
         let detailView = EventDetailViewController(coder: coder)
         guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else {return detailView}
-        detailView?.event = events[indexPath.item]
+        var index = indexPath.item
+        if indexPath.section == 0 {
+            index = events.firstIndex(of: favorites[index])!
+        }
+        detailView?.event = events[index]
         detailView?.delegate = self
-        detailView?.index = indexPath.item
+        detailView?.index = index
         return detailView
     }
     
