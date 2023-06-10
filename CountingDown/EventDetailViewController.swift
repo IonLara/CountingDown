@@ -20,6 +20,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var remainLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func favoriteTapped(_ sender: UIButton) {
@@ -29,8 +30,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         delegate.toggleFavorite(index)
     }
     
-    func getTimeLeft(_ seconds: Double) -> (Int, Int, Int, Int) {
-        var seconds = Double(seconds)
+    func getTimeLeft() -> (Int, Int, Int, Int) {
+        var seconds = Double(event.date.timeIntervalSinceNow)
         let days = seconds / 86_400
         seconds = seconds.truncatingRemainder(dividingBy: 86_400)
         let hours = seconds / 3_600
@@ -39,6 +40,16 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         seconds = seconds.truncatingRemainder(dividingBy: 60)
         
         return (Int(days), Int(hours), Int(minutes), Int(seconds))
+    }
+    
+    func updateRemain() {
+        let time = getTimeLeft()
+        let days = time.0 < 1 ? "" : "\(time.0) Days, "
+        let hours = days == "" && time.1 < 1 ? "" : "\(time.1) Hours, "
+        let minutes = hours == "" && time.2 < 1 ? "" : "\(time.2) Minutes, "
+        let seconds = "\(time.3) Seconds Left."
+        
+        remainLabel.text = "\(days)\(hours)\(minutes)\(seconds)"
     }
     
     override func viewDidLoad() {
@@ -54,6 +65,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        updateRemain()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -62,9 +75,9 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 2
+            return 1
         case 1:
-            return event.tasks.count
+            return event.tasks.count + 1
         case 2:
             return 1
         default:
@@ -76,15 +89,6 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         case [0,0]:
             let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
             var content = cell.defaultContentConfiguration()
-            let time = getTimeLeft(event.date.timeIntervalSinceNow)
-            let text = "\(time.0) Days, \(time.1) Hours, \(time.2) Minutes, and \(time.3) Seconds left."
-            content.text = text
-            content.textProperties.font = .boldSystemFont(ofSize: 19)
-            cell.contentConfiguration = content
-            return cell
-        case [0,1]:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
-            var content = cell.defaultContentConfiguration()
             let formattedDate = event.isAllDay ? event.date.formatted(date: .abbreviated, time: .omitted) : event.date.formatted(date: .abbreviated, time: .shortened)
             content.text = "Date:"
             content.textProperties.font = .boldSystemFont(ofSize: 19)
@@ -92,9 +96,21 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             content.secondaryTextProperties.font = .boldSystemFont(ofSize: 17)
             cell.contentConfiguration = content
             return cell
+        case [1,0]:
+            return tableView.dequeueReusableCell(withIdentifier: "AddCell", for: indexPath)
         default:
             return  tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
             
+        }
+    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 1:
+            return "Tasks:"
+        case 2:
+            return "Notes:"
+        default:
+            return nil
         }
     }
 }

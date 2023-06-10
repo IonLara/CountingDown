@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -48,7 +49,9 @@
         <scene sceneID="UCM-st-T1l">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0yZ-BL-Y4O" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Events" id="j98-dj-94z"/>
+                    <tabBarItem key="tabBarItem" title="Events" id="j98-dj-94z">
+                        <imageReference key="selectedImage" image="house.fill" catalog="system" symbolScale="default"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="N9W-HN-yH5">
                         <rect key="frame" x="0.0" y="59" width="393" height="96"/>
@@ -140,23 +143,23 @@
                                 <rect key="frame" x="16" y="119" width="361" height="634"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DYu-9A-vIV">
-                                        <rect key="frame" x="0.0" y="0.0" width="361" height="361"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="228"/>
                                         <color key="backgroundColor" red="0.65098039215686276" green="0.89351522770994596" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="DYu-9A-vIV" secondAttribute="height" multiplier="1:1" id="2Ee-UQ-LX4"/>
+                                            <constraint firstAttribute="width" secondItem="DYu-9A-vIV" secondAttribute="height" multiplier="19:12" id="pNd-IF-jXb"/>
                                         </constraints>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="81" translatesAutoresizingMaskIntoConstraints="NO" id="AWa-0M-e2e">
-                                        <rect key="frame" x="0.0" y="384" width="361" height="41.333333333333314"/>
+                                        <rect key="frame" x="0.0" y="250.99999999999997" width="361" height="40.666666666666657"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RSi-cv-tQ8">
-                                                <rect key="frame" x="0.0" y="0.0" width="176" height="41.333333333333336"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="176" height="40.666666666666664"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zm6-KS-rdk">
-                                                <rect key="frame" x="257" y="0.0" width="104" height="41.333333333333336"/>
+                                                <rect key="frame" x="257" y="0.0" width="104" height="40.666666666666664"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" image="star" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
@@ -170,8 +173,14 @@
                                             </button>
                                         </subviews>
                                     </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000 Days, 00 Hours, 00 Minutes, and 00 Seconds Left." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VTQ-1A-CQH">
+                                        <rect key="frame" x="0.0" y="314.66666666666669" width="361" height="45.666666666666686"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hlQ-1V-iLD">
-                                        <rect key="frame" x="0.0" y="448.33333333333343" width="361" height="185.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="383.33333333333331" width="361" height="250.66666666666669"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="InfoCell" textLabel="g1f-d6-OG1" detailTextLabel="TXD-c8-fQP" style="IBUITableViewCellStyleValue1" id="ZSs-Ol-vbQ">
                                                 <rect key="frame" x="0.0" y="50" width="361" height="43.666667938232422"/>
@@ -235,6 +244,28 @@
                                                     </subviews>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AddCell" id="P2j-Ux-Adn">
+                                                <rect key="frame" x="0.0" y="181.00000381469727" width="361" height="43.666667938232422"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="P2j-Ux-Adn" id="ka0-8E-Pe6">
+                                                    <rect key="frame" x="0.0" y="0.0" width="361" height="43.666667938232422"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add Task" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ib8-Gj-sA2">
+                                                            <rect key="frame" x="20" y="11" width="83" height="23"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="plus.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="hCP-kt-hQw">
+                                                            <rect key="frame" x="306" y="5" width="35" height="35"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="tintColor" systemColor="systemGreenColor"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
                                         </prototypes>
                                         <sections/>
                                     </tableView>
@@ -255,6 +286,7 @@
                         <outlet property="eventImage" destination="DYu-9A-vIV" id="y0n-C5-psg"/>
                         <outlet property="favoriteButton" destination="Zm6-KS-rdk" id="wx7-cV-jbN"/>
                         <outlet property="nameLabel" destination="RSi-cv-tQ8" id="oam-ay-sV4"/>
+                        <outlet property="remainLabel" destination="VTQ-1A-CQH" id="azO-38-1Rn"/>
                         <outlet property="tableView" destination="hlQ-1V-iLD" id="S2p-LC-sIZ"/>
                     </connections>
                 </viewController>
@@ -281,7 +313,9 @@
         <scene sceneID="yzr-WZ-v8R">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3O5-eW-YF8" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Groups" id="Qw0-Oq-Oyr"/>
+                    <tabBarItem key="tabBarItem" title="Groups" id="Qw0-Oq-Oyr">
+                        <imageReference key="selectedImage" image="person.3.fill" catalog="system" symbolScale="default"/>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="VoX-GF-2gp">
                         <rect key="frame" x="0.0" y="59" width="393" height="96"/>
@@ -317,10 +351,19 @@
     </scenes>
     <resources>
         <image name="circle" catalog="system" width="128" height="123"/>
+        <image name="house.fill" catalog="system" width="128" height="104"/>
+        <image name="person.3.fill" catalog="system" width="128" height="61"/>
+        <image name="plus.circle.fill" catalog="system" width="128" height="123"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
