@@ -54,20 +54,58 @@ class Event: Codable, Equatable{
         self.secondAlarm = secondAlarm
     }
 
-    enum NotificationCadency: Codable {
-        case never
-        case daily
-        case bidaily
-        case weekly
-        case biweekly
-        case monthly
+    enum NotificationCadency: String, Codable {
+        case never = "Never"
+        case daily = "Everyday"
+        case bidaily = "Every Second Day"
+        case weekly = "Every Week"
+        case biweekly = "Every Second Week"
+        case monthly = "Every Month"
+        
+        static let all = [never, daily, bidaily, weekly, biweekly, monthly]
+        
+        var index: Int {
+            switch self {
+            case .never:
+                return 0
+            case .daily:
+                return 1
+            case .bidaily:
+                return 2
+            case .weekly:
+                return 3
+            case .biweekly:
+                return 4
+            case .monthly:
+                return 5
+            }
+        }
     }
-    enum AlarmTime: Codable{
-        case none
-        case tenMin
-        case halfHour
-        case oneHour
-        case sixHours
-        case dayBefore
+    enum AlarmTime: String, Codable{
+        case none = "None"
+        case tenMin = "Ten Minutes Before"
+        case halfHour = "30 Minutes Before"
+        case oneHour = "One Hour Before"
+        case sixHours = "Six Hours Before"
+        case dayBefore = "The Day Before"
+        
+        static let all = [none, tenMin, halfHour, oneHour, sixHours, dayBefore]
+        
+        var index: Int {
+            switch self {
+            case .none:
+                return 0
+            case .tenMin:
+                return 1
+            case .halfHour:
+                return 2
+            case .oneHour:
+                return 3
+            case .sixHours:
+                return 4
+            case .dayBefore:
+                return 5
+            }
+        }
     }
 }

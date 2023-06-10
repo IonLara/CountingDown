@@ -31,6 +31,11 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         delegate.toggleFavorite(index, event.isFavorite)
     }
+    @IBSegueAction func showNotifications(_ coder: NSCoder, sender: Any?) -> NotificationTableViewController? {
+        let notifications = NotificationTableViewController(coder: coder)
+        notifications?.current = event.notifications
+        return notifications
+    }
     
     func updater() {
         updateRemain()
@@ -64,6 +69,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             self.updater()
         })
         
+        navigationItem.rightBarButtonItem = editButtonItem
+        
         eventImage.layer.cornerRadius = 20.0
         eventImage.clipsToBounds = true
         if event.hasImage == false {
@@ -88,21 +95,23 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath == [1,0] {
+        if indexPath == [2,0] {
             event.tasks.insert(Task(description: "", isComplete: false), at: 0)
-            tableView.reloadSections([1], with: .automatic)
+            tableView.reloadSections([2], with: .automatic)
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return 1
         case 1:
-            return event.tasks.count + 1
+            return 3
         case 2:
+            return event.tasks.count + 1
+        case 3:
             return 1
         default:
             return 0
@@ -121,6 +130,33 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             cell.contentConfiguration = content
             return cell
         case 1:
+            
+            switch indexPath.row {
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell", for: indexPath)
+                var content = cell.defaultContentConfiguration()
+                content.text = "Notifications"
+                content.secondaryText = event.notifications.rawValue
+                cell.contentConfiguration = content
+                return cell
+            case 1:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath)
+                var content = cell.defaultContentConfiguration()
+                content.text = "First Alarm"
+                content.secondaryText = event.firstAlarm.rawValue
+                cell.contentConfiguration = content
+                return cell
+            case 2:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath)
+                var content = cell.defaultContentConfiguration()
+                content.text = "Second Alarm"
+                content.secondaryText = event.secondAlarm.rawValue
+                cell.contentConfiguration = content
+                return cell
+            default:
+                return tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
+            }
+        case 2:
             if indexPath.row < 1 {
                 return tableView.dequeueReusableCell(withIdentifier: "AddCell", for: indexPath)
             } else {
@@ -130,7 +166,6 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 cell.updateFields()
                 return cell
             }
-            
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "NotesCell", for: indexPath)
             var content = cell.defaultContentConfiguration()
@@ -146,12 +181,15 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 1:
-            return "Tasks:"
         case 2:
+            return "Tasks:"
+        case 3:
             return "Notes:"
         default:
             return nil
         }
+    }
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        false
     }
 }
