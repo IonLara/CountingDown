@@ -80,6 +80,12 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
         return detailView
     }
     
+    @IBAction func unwindToEventCollection(segue: UIStoryboardSegue, sender: Any?) {
+        let detail = sender as! EventDetailViewController
+        let newData = detail.event
+        events[detail.index] = newData!
+    }
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         2
     }

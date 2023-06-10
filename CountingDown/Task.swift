@@ -7,8 +7,13 @@
 
 import Foundation
 
-struct Task: Codable {
+class Task: Codable {
     
     var description: String
     var isComplete: Bool
+    
+    init(description: String, isComplete: Bool) {
+        self.description = description
+        self.isComplete = isComplete
+    }
 }

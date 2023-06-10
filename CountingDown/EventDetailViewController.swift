@@ -86,6 +86,13 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         timer.invalidate()
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath == [1,0] {
+            event.tasks.insert(Task(description: "", isComplete: false), at: 0)
+            tableView.reloadSections([1], with: .automatic)
+        }
+    }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -102,8 +109,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath {
-        case [0,0]:
+        switch indexPath.section {
+        case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
             var content = cell.defaultContentConfiguration()
             let formattedDate = event.isAllDay ? event.date.formatted(date: .abbreviated, time: .omitted) : event.date.formatted(date: .abbreviated, time: .shortened)
@@ -113,8 +120,17 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             content.secondaryTextProperties.font = .boldSystemFont(ofSize: 17)
             cell.contentConfiguration = content
             return cell
-        case [1,0]:
-            return tableView.dequeueReusableCell(withIdentifier: "AddCell", for: indexPath)
+        case 1:
+            if indexPath.row < 1 {
+                return tableView.dequeueReusableCell(withIdentifier: "AddCell", for: indexPath)
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! TaskTableViewCell
+                print(event.tasks[indexPath.row - 1])
+                cell.task = event.tasks[indexPath.row - 1]
+                cell.updateFields()
+                return cell
+            }
+            
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "NotesCell", for: indexPath)
             var content = cell.defaultContentConfiguration()
