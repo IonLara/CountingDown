@@ -17,6 +17,14 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     var delegate: EventDelegate!
     var index: Int!
     
+    let dateInfoCell = DateDetailTableViewCell()
+    let timeInfoCell = TimeInfoTableViewCell()
+    let dateCell = DateTableViewCell()
+    let timeCell = TimeTableViewCell()
+    
+    var isDateOpen = false
+    var isTimeOpen = false
+    
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var favoriteButton: UIButton!
@@ -63,11 +71,42 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         remainLabel.text = "\(days)\(hours)\(minutes)\(seconds)"
     }
     
+    @objc func updateDatePicker() {
+        var content = dateInfoCell.contentConfiguration as! UIListContentConfiguration
+        let formattedDate = dateCell.datePicker.date.formatted(date: .abbreviated, time: .omitted)
+        content.secondaryText = formattedDate
+        dateInfoCell.contentConfiguration = content
+        event.date = dateCell.datePicker.date
+    }
+    
+    @objc func updateAllDay() {
+        isTimeOpen.toggle()
+        event.isAllDay.toggle()
+        updateDatePicker()
+        tableView.reloadData()
+    }
+    
+    @objc func updateTime() {
+        event.date = timeCell.timePicker.date
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
             self.updater()
         })
+        isTimeOpen = !event.isAllDay
+        
+        dateCell.datePicker.date = event.date
+        dateCell.datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
+        dateCell.datePicker.addTarget(self, action: #selector(updateDatePicker), for: .valueChanged)
+        dateCell.accessoryType = .disclosureIndicator
+        
+        timeInfoCell.accessoryType = .none
+        timeInfoCell.allDaySwitch.addTarget(self, action: #selector(updateAllDay), for: .valueChanged)
+        timeCell.timePicker.date = event.date
+        timeCell.timePicker.addTarget(self, action: #selector(updateTime), for: .valueChanged)
         
         navigationItem.rightBarButtonItem = editButtonItem
         
@@ -98,6 +137,11 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         if indexPath == [2,0] {
             event.tasks.insert(Task(description: "", isComplete: false), at: 0)
             tableView.reloadSections([2], with: .automatic)
+        } else if indexPath == [0,0] {
+            isDateOpen.toggle()
+            tableView.reloadData()
+        } else if indexPath == [0,2] {
+            updateAllDay()
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -106,7 +150,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 1
+            return 4
         case 1:
             return 3
         case 2:
@@ -120,15 +164,31 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
-            var content = cell.defaultContentConfiguration()
-            let formattedDate = event.isAllDay ? event.date.formatted(date: .abbreviated, time: .omitted) : event.date.formatted(date: .abbreviated, time: .shortened)
-            content.text = "Date:"
-            content.textProperties.font = .boldSystemFont(ofSize: 19)
-            content.secondaryText = "\(formattedDate.capitalized)"
-            content.secondaryTextProperties.font = .boldSystemFont(ofSize: 17)
-            cell.contentConfiguration = content
-            return cell
+            switch indexPath.row {
+            case 0:
+                //                let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
+                var content = dateInfoCell.defaultContentConfiguration()
+                let formattedDate = event.date.formatted(date: .abbreviated, time: .omitted)
+                content.text = "Date:"
+                content.textProperties.font = .boldSystemFont(ofSize: 19)
+                content.secondaryText = "\(formattedDate.capitalized)"
+                content.secondaryTextProperties.font = .boldSystemFont(ofSize: 17)
+                dateInfoCell.contentConfiguration = content
+                return dateInfoCell
+            case 1:
+                dateCell.datePicker.isHidden = !isDateOpen
+                return dateCell
+            case 2:
+                timeInfoCell.allDaySwitch.isOn = event.isAllDay
+                return timeInfoCell
+            case 3:
+                timeCell.label.text = isTimeOpen ? "Time: " : ""
+                timeCell.timePicker.isHidden = !isTimeOpen
+                return timeCell
+            default:
+                return tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath)
+            }
+            
         case 1:
             
             switch indexPath.row {
@@ -154,7 +214,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 cell.contentConfiguration = content
                 return cell
             default:
-                return tableView.dequeueReusableCell(withIdentifier: "InfoCell", for: indexPath)
+                return tableView.dequeueReusableCell(withIdentifier: "AlarmCell", for: indexPath)
             }
         case 2:
             if indexPath.row < 1 {
@@ -179,8 +239,33 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             return cell
         }
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath {
+        case [0,1] where isDateOpen == false:
+            return 0
+        case [0,1]:
+            return 190
+        case [0,3] where isTimeOpen == false:
+            return 0
+        case [0,3]:
+            return UITableView.automaticDimension
+        default:
+            return UITableView.automaticDimension
+        }
+    }
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath == [0,1]{
+            return 190
+        } else {
+            return UITableView.automaticDimension
+        }
+    }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
+        case 0:
+            return "Date:"
+        case 1:
+            return "Notifications:"
         case 2:
             return "Tasks:"
         case 3:

@@ -15,6 +15,10 @@
 		626563832A3008B300D45247 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563822A3008B300D45247 /* EventDetailViewController.swift */; };
 		626563872A341ACB00D45247 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563862A341ACB00D45247 /* TaskTableViewCell.swift */; };
 		626563892A34483E00D45247 /* NotificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563882A34483E00D45247 /* NotificationTableViewController.swift */; };
+		6265638B2A38284800D45247 /* DateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6265638A2A38284800D45247 /* DateTableViewCell.swift */; };
+		6265638D2A383EEB00D45247 /* DateDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6265638C2A383EEB00D45247 /* DateDetailTableViewCell.swift */; };
+		6265638F2A3852E900D45247 /* TimeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6265638E2A3852E900D45247 /* TimeTableViewCell.swift */; };
+		626563912A3858C100D45247 /* TimeInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563902A3858C100D45247 /* TimeInfoTableViewCell.swift */; };
 		62C055282A2E8F980071331F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C055272A2E8F980071331F /* AppDelegate.swift */; };
 		62C0552A2A2E8F980071331F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C055292A2E8F980071331F /* SceneDelegate.swift */; };
 		62C0552C2A2E8F980071331F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C0552B2A2E8F980071331F /* ViewController.swift */; };
@@ -32,6 +36,10 @@
 		626563822A3008B300D45247 /* EventDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController.swift; sourceTree = "<group>"; };
 		626563862A341ACB00D45247 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		626563882A34483E00D45247 /* NotificationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewController.swift; sourceTree = "<group>"; };
+		6265638A2A38284800D45247 /* DateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTableViewCell.swift; sourceTree = "<group>"; };
+		6265638C2A383EEB00D45247 /* DateDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateDetailTableViewCell.swift; sourceTree = "<group>"; };
+		6265638E2A3852E900D45247 /* TimeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableViewCell.swift; sourceTree = "<group>"; };
+		626563902A3858C100D45247 /* TimeInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInfoTableViewCell.swift; sourceTree = "<group>"; };
 		62C055242A2E8F980071331F /* CountingDown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CountingDown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62C055272A2E8F980071331F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62C055292A2E8F980071331F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +91,10 @@
 				626563862A341ACB00D45247 /* TaskTableViewCell.swift */,
 				626563822A3008B300D45247 /* EventDetailViewController.swift */,
 				626563882A34483E00D45247 /* NotificationTableViewController.swift */,
+				6265638A2A38284800D45247 /* DateTableViewCell.swift */,
+				6265638C2A383EEB00D45247 /* DateDetailTableViewCell.swift */,
+				6265638E2A3852E900D45247 /* TimeTableViewCell.swift */,
+				626563902A3858C100D45247 /* TimeInfoTableViewCell.swift */,
 				62C0552D2A2E8F980071331F /* Main.storyboard */,
 				62C055302A2E8F990071331F /* Assets.xcassets */,
 				62C055322A2E8F990071331F /* LaunchScreen.storyboard */,
@@ -162,15 +174,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6265638F2A3852E900D45247 /* TimeTableViewCell.swift in Sources */,
 				62C0552C2A2E8F980071331F /* ViewController.swift in Sources */,
 				6265637F2A2EB82200D45247 /* EventCollectionViewCell.swift in Sources */,
 				626563872A341ACB00D45247 /* TaskTableViewCell.swift in Sources */,
+				6265638B2A38284800D45247 /* DateTableViewCell.swift in Sources */,
 				62C055282A2E8F980071331F /* AppDelegate.swift in Sources */,
 				626563832A3008B300D45247 /* EventDetailViewController.swift in Sources */,
 				62C0552A2A2E8F980071331F /* SceneDelegate.swift in Sources */,
 				626563892A34483E00D45247 /* NotificationTableViewController.swift in Sources */,
 				626563772A2E9EEE00D45247 /* EventCollectionViewController.swift in Sources */,
+				626563912A3858C100D45247 /* TimeInfoTableViewCell.swift in Sources */,
 				6265637B2A2EA45900D45247 /* Event.swift in Sources */,
+				6265638D2A383EEB00D45247 /* DateDetailTableViewCell.swift in Sources */,
 				6265637D2A2EA4A100D45247 /* Task.swift in Sources */,
 				626563792A2EA19C00D45247 /* Manager.swift in Sources */,
 			);
