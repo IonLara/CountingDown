@@ -37,6 +37,9 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
 
         collectionView.reloadData()
     }
+    func updateName(_ index: Int) {
+        collectionView.reloadItems(at: [[1,index]])
+    }
     
     func getFavorites() -> [Event] {
         var temp = [Event]()

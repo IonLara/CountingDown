@@ -9,6 +9,7 @@ import UIKit
 
 protocol EventDelegate {
     func toggleFavorite(_ index: Int, _ adding: Bool)
+    func updateName(_ index: Int)
 }
 
 class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -28,7 +29,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     var isTimeOpen = false
     
     @IBOutlet weak var eventImage: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var nameLabel: UITextField!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var remainLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -99,15 +100,22 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        guard let userInfo = notification.userInfo else {return}
-        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {return}
-        let keyboardFrame = keyboardSize.cgRectValue
-        if self.view.frame.origin.y == 0{                       self.view.frame.origin.y -= keyboardFrame.height
+        if !nameLabel.isFirstResponder {
+            guard let userInfo = notification.userInfo else {return}
+            guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {return}
+            let keyboardFrame = keyboardSize.cgRectValue
+            if self.view.frame.origin.y == 0{                       self.view.frame.origin.y -= keyboardFrame.height
+            }
         }
     }
     @objc func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0{                       self.view.frame.origin.y = 0
         }
+    }
+    
+    @objc func updateEventName() {
+        event.title = nameLabel.text ?? ""
+        delegate.updateName(index)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,6 +126,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
             self.updater()
         })
+        nameLabel.addTarget(self, action: #selector(updateEventName), for: .allEditingEvents)
+        
         noteCell.textField.delegate = self
         isTimeOpen = !event.isAllDay
         
