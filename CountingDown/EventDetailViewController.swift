@@ -48,6 +48,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBSegueAction func showNotifications(_ coder: NSCoder, sender: Any?) -> NotificationTableViewController? {
         let notifications = NotificationTableViewController(coder: coder)
         notifications?.current = event.notifications
+        notifications?.event = event
+        notifications?.editView = self
         return notifications
     }
     

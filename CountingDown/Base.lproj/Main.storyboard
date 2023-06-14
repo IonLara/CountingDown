@@ -541,6 +541,7 @@
                             <outlet property="delegate" destination="C7W-bV-xDo" id="BTb-RL-r0b"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="kwK-Y5-glq"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="idS-Ed-o07" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
