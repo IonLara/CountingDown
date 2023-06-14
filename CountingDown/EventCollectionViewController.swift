@@ -90,6 +90,15 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
         detailView?.index = index
         return detailView
     }
+    @IBSegueAction func testSegue(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
+        let detailView = EventDetailViewController(coder: coder)
+        
+        var index = 1
+        detailView?.event = events[index]
+        detailView?.delegate = self
+        detailView?.index = index
+        return detailView
+    }
     
     @IBAction func unwindToEventCollection(segue: UIStoryboardSegue, sender: Any?) {
         let detail = sender as! EventDetailViewController

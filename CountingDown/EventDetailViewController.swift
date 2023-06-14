@@ -22,6 +22,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     let dateCell = DateTableViewCell()
     let timeCell = TimeTableViewCell()
     
+    let noteCell = NotesTableViewCell()
+    
     var isDateOpen = false
     var isTimeOpen = false
     
@@ -90,12 +92,33 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         event.date = timeCell.timePicker.date
     }
     
+    @objc func notesBeganEditing() {
+        if noteCell.textField.textColor == .lightGray && noteCell.textField.isFirstResponder {
+        }
+    }
+    
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else {return}
+        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {return}
+        let keyboardFrame = keyboardSize.cgRectValue
+        if self.view.frame.origin.y == 0{                       self.view.frame.origin.y -= keyboardFrame.height
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0{                       self.view.frame.origin.y = 0
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
             self.updater()
         })
+        noteCell.textField.delegate = self
         isTimeOpen = !event.isAllDay
         
         dateCell.datePicker.date = event.date
@@ -227,16 +250,14 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 return cell
             }
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NotesCell", for: indexPath)
-            var content = cell.defaultContentConfiguration()
             if let notes = event.notes {
-                content.text = notes
+
+                noteCell.textField.text = notes
             } else {
-                content.text = "No notes"
-                content.textProperties.color = .darkGray
+                noteCell.textField.text = "No notes..."
+                noteCell.textField.textColor = .lightGray
             }
-            cell.contentConfiguration = content
-            return cell
+            return noteCell
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -276,5 +297,20 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         false
+    }
+}
+
+extension EventDetailViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        event.notes = textView.text
+        tableView.beginUpdates()
+        tableView.endUpdates()
+        tableView.scrollToRow(at: [3,0], at: .none, animated: true)
+    }
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .lightGray && textView.isFirstResponder {
+            textView.text = nil
+            textView.textColor = .black
+        }
     }
 }
