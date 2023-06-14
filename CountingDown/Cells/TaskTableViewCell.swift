@@ -8,6 +8,8 @@
 import UIKit
 
 class TaskTableViewCell: UITableViewCell {
+    
+    var index: Int!
 
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var taskButton: UIButton!

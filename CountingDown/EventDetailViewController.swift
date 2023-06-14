@@ -36,6 +36,9 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     var timer = Timer()
     
+    @IBAction func endedEditingName(_ sender: UITextField) {
+        sender.resignFirstResponder()
+    }
     @IBAction func favoriteTapped(_ sender: UIButton) {
         event.isFavorite.toggle()
         favoriteButton.isSelected = event.isFavorite
@@ -113,12 +116,32 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
+    @objc func taskTextLeft(textField: UITextField) {
+        if textField.text == "" || textField.text == nil {
+            textField.text = "Untitled Task"
+        }
+        let temp = textField.superview?.superview as! TaskTableViewCell
+        if event.tasks.count <= temp.index {
+            return
+        }
+        event.tasks[temp.index].description = textField.text!
+        event.tasks[temp.index].isComplete = temp.taskButton.isSelected
+    }
+    
     @objc func updateEventName() {
-        event.title = nameLabel.text ?? ""
+        event.title = nameLabel.text == "" || nameLabel.text == nil ? "Untitled" : nameLabel.text!
         delegate.updateName(index)
     }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -126,7 +149,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
             self.updater()
         })
-        nameLabel.addTarget(self, action: #selector(updateEventName), for: .allEditingEvents)
+        nameLabel.addTarget(self, action: #selector(updateEventName), for: .editingChanged)
         
         noteCell.textField.delegate = self
         isTimeOpen = !event.isAllDay
@@ -170,6 +193,9 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         if indexPath == [2,0] {
             event.tasks.insert(Task(description: "", isComplete: false), at: 0)
             tableView.reloadSections([2], with: .automatic)
+            tableView.scrollToRow(at: [2,1], at: .none, animated: true)
+            let temp = tableView.cellForRow(at: [2,1]) as! TaskTableViewCell
+            temp.taskTextField.becomeFirstResponder()
         } else if indexPath == [0,0] {
             isDateOpen.toggle()
             tableView.reloadData()
@@ -254,9 +280,11 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 return tableView.dequeueReusableCell(withIdentifier: "AddCell", for: indexPath)
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! TaskTableViewCell
-                print(event.tasks[indexPath.row - 1])
                 cell.task = event.tasks[indexPath.row - 1]
                 cell.updateFields()
+                
+                cell.index = indexPath.row - 1
+                cell.taskTextField.addTarget(self, action: #selector(taskTextLeft), for: .editingDidEnd)
                 return cell
             }
         default:
@@ -306,7 +334,17 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        false
+        if indexPath.section == 2 && indexPath.row > 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            event.tasks.remove(at: indexPath.row - 1)
+            tableView.reloadSections([2], with: .automatic)
+        }
     }
 }
 
