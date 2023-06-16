@@ -9,13 +9,17 @@ import UIKit
 
 private let reuseIdentifier = "EventCell"
 
-class EventCollectionViewController: UICollectionViewController, EventDelegate{
+class EventCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, EventDelegate{
     
     var events = [Event]()
     var favorites = [Event]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        
+        
 
         if let savedEvents = Manager.loadEvents() {
             events = savedEvents
@@ -63,9 +67,13 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.4))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
         
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20)
+        section.boundarySupplementaryItems = [header]
+
         return UICollectionViewCompositionalLayout(section: section)
     }
     
@@ -133,18 +141,15 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
         switch indexPath.section {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
-            print(indexPath.item)
             let event = favorites[indexPath.item]
             cell.nameLabel.text = event.title
             let temp = getTime(event.date.timeIntervalSinceNow)
             cell.numberLabel.text = "\(temp.1)"
             if !event.hasImage {
-                print("\(event.title) has image: \(event.hasImage)")
                 cell.image.image = nil
                 cell.image.layer.borderWidth = 0
                 cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
             } else {
-                print("\(event.title) has image: \(event.hasImage)")
                 if event.isImageIncluded {
                     cell.image.image = UIImage(named: event.imageAddress)
                 } else {
@@ -158,7 +163,6 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
-            print(indexPath.item)
             let event = events[indexPath.item]
             cell.nameLabel.text = event.title
             let temp = getTime(event.date.timeIntervalSinceNow)
@@ -167,7 +171,6 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
                 cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
                 cell.image.image = nil
                 cell.image.layer.borderWidth = 0
-                print("\(event.title) has image: \(event.hasImage)")
             } else {
                 if event.isImageIncluded {
                     cell.image.image = UIImage(named: event.imageAddress)
@@ -176,13 +179,28 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
                 }
                 cell.image.layer.borderWidth = 5
                 cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
-                print("\(event.title) has image: \(event.hasImage)")
             }
             cell.image.layer.cornerRadius = 20
             cell.image.clipsToBounds = true
             return cell
         }
     }
+    @objc override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! HeaderCollectionReusableView
+        if indexPath.section == 0 {
+            headerView.label.text = "Favorites"
+        } else {
+            headerView.label.text = "Events"
+        }
+        headerView.label.font = .boldSystemFont(ofSize: 28)
+        headerView.label.textColor = .darkGray
+        
+        return headerView
+    }
+    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 80)
+    }
+    
 }
 
 enum TimeMeassure {
