@@ -190,6 +190,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             eventImage.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
         } else if event.isImageIncluded == true {
             eventImage.image = UIImage(named: event.imageAddress)
+            eventImage.layer.borderWidth = 5
+            eventImage.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
         } else {
             //Add code to get image from user's phone
         }

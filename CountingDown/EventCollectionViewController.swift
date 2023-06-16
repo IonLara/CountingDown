@@ -34,11 +34,16 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
                 favorites.remove(at: i)
             }
         }
-
+        
         collectionView.reloadData()
+//        collectionView.insertItems(at: [[0,0]])
+        
     }
     func updateName(_ index: Int) {
         collectionView.reloadItems(at: [[1,index]])
+        if favorites.contains(events[index]) {
+            collectionView.reloadItems(at: [[0, favorites.firstIndex(of: events[index])!]])
+        }
     }
     
     func getFavorites() -> [Event] {
@@ -124,20 +129,59 @@ class EventCollectionViewController: UICollectionViewController, EventDelegate{
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
+        
         switch indexPath.section {
         case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
+            print(indexPath.item)
             let event = favorites[indexPath.item]
             cell.nameLabel.text = event.title
             let temp = getTime(event.date.timeIntervalSinceNow)
             cell.numberLabel.text = "\(temp.1)"
+            if !event.hasImage {
+                print("\(event.title) has image: \(event.hasImage)")
+                cell.image.image = nil
+                cell.image.layer.borderWidth = 0
+                cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+            } else {
+                print("\(event.title) has image: \(event.hasImage)")
+                if event.isImageIncluded {
+                    cell.image.image = UIImage(named: event.imageAddress)
+                } else {
+                    //Code to get image from phone
+                }
+                cell.image.layer.borderWidth = 5
+                cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+            }
+            cell.image.layer.cornerRadius = 20
+            cell.image.clipsToBounds = true
+            return cell
         default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
+            print(indexPath.item)
             let event = events[indexPath.item]
             cell.nameLabel.text = event.title
             let temp = getTime(event.date.timeIntervalSinceNow)
             cell.numberLabel.text = "\(temp.1)"
+            if !event.hasImage {
+                cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+                cell.image.image = nil
+                cell.image.layer.borderWidth = 0
+                print("\(event.title) has image: \(event.hasImage)")
+            } else {
+                if event.isImageIncluded {
+                    cell.image.image = UIImage(named: event.imageAddress)
+                } else {
+                    //Code to get image from phone
+                }
+                cell.image.layer.borderWidth = 5
+                cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+                print("\(event.title) has image: \(event.hasImage)")
+            }
+            cell.image.layer.cornerRadius = 20
+            cell.image.clipsToBounds = true
+            return cell
         }
-        return cell
     }
 }
 
