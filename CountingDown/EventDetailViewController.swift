@@ -52,6 +52,22 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         notifications?.editView = self
         return notifications
     }
+    @IBSegueAction func showAlarms(_ coder: NSCoder, sender: Any?) -> AlarmTableViewController? {
+        let alarms = AlarmTableViewController(coder: coder)
+        let cell = sender as! UITableViewCell
+        let isFirst = tableView.indexPath(for: cell) == [1,1]
+        if isFirst {
+            alarms?.current = event.firstAlarm
+            alarms?.disabledIndex = event.secondAlarm.index
+        } else {
+            alarms?.current = event.secondAlarm
+            alarms?.disabledIndex = event.firstAlarm.index
+        }
+        alarms?.editView = self
+        alarms?.event = event
+        alarms?.isFirst = isFirst
+        return alarms
+    }
     
     func updater() {
         updateRemain()
