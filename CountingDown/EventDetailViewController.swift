@@ -12,7 +12,7 @@ protocol EventDelegate {
     func updateName(_ index: Int)
 }
 
-class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIColorPickerViewControllerDelegate {
     
     var event: Event!
     var delegate: EventDelegate!
@@ -33,6 +33,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var remainLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var colorWell: UIColorWell!
     
     var timer = Timer()
     
@@ -155,6 +156,43 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         view.endEditing(true)
     }
     
+    @objc func imageTapped() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Choose Image", style: .default, handler: {_ in
+            self.chooseImage()
+        }))
+        alertController.addAction(UIAlertAction(title: "Use Emoji", style: .default, handler: {_ in
+            self.useEmoji()
+        }))
+        present(alertController, animated: true)
+    }
+    
+    func useEmoji() {
+        print("Choosing Emoji")
+        
+    }
+    func chooseImage() {
+        print("Choosing Image")
+    }
+    @objc func colorChanged() {
+        let color = colorWell.selectedColor
+        eventImage.backgroundColor = color
+        eventImage.layer.borderColor = color?.cgColor
+        
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        color?.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        event.colorR = red
+        event.colorG = green
+        event.colorB = blue
+        event.colorA = 1
+        
+        delegate.updateName(index)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -185,6 +223,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         eventImage.layer.cornerRadius = 20.0
         eventImage.clipsToBounds = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        eventImage.addGestureRecognizer(gestureRecognizer)
         if event.hasImage == false {
             eventImage.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
         } else if event.isImageIncluded == true {
@@ -194,6 +234,10 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         } else {
             //Add code to get image from user's phone
         }
+        colorWell.selectedColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+        colorWell.supportsAlpha = false
+        colorWell.addTarget(self, action: #selector(colorChanged), for: .valueChanged)
+        
         nameLabel.text = event.title
         favoriteButton.isSelected = event.isFavorite
         

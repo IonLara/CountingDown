@@ -217,7 +217,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="23" translatesAutoresizingMaskIntoConstraints="NO" id="O6u-vi-WCn">
                                 <rect key="frame" x="16" y="119" width="361" height="634"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DYu-9A-vIV">
+                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DYu-9A-vIV">
                                         <rect key="frame" x="0.0" y="0.0" width="361" height="228"/>
                                         <color key="backgroundColor" red="0.65098039215686276" green="0.89351522770994596" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
@@ -432,6 +432,10 @@
                                     </tableView>
                                 </subviews>
                             </stackView>
+                            <colorWell contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eFE-ti-ww5">
+                                <rect key="frame" x="330" y="300" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </colorWell>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MnL-b0-5N9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -443,9 +447,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="UHz-gn-5C4">
+                        <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" image="square.and.arrow.up" catalog="system" id="LB6-Xu-ErZ"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="colorWell" destination="eFE-ti-ww5" id="PPX-Zd-YLj"/>
                         <outlet property="eventImage" destination="DYu-9A-vIV" id="y0n-C5-psg"/>
                         <outlet property="favoriteButton" destination="Zm6-KS-rdk" id="wx7-cV-jbN"/>
                         <outlet property="nameLabel" destination="G8S-Eq-aRV" id="2Ls-7K-Z2z"/>
