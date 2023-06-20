@@ -104,7 +104,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     }
     
     func createLayout() ->UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.45), heightDimension: .fractionalWidth(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.45), heightDimension: .fractionalWidth(0.48))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
@@ -193,6 +193,8 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             cell.nameLabel.text = event.title
             let temp = getTime(event.date.timeIntervalSinceNow)
             cell.numberLabel.text = "\(temp.1)"
+            cell.remainderLabel.text = "\(temp.0.rawValue) Left"
+            
             if !event.hasImage {
                 cell.image.image = nil
                 cell.image.layer.borderWidth = 0
@@ -219,6 +221,8 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             cell.nameLabel.text = event.title
             let temp = getTime(event.date.timeIntervalSinceNow)
             cell.numberLabel.text = "\(temp.1)"
+            cell.remainderLabel.text = "\(temp.0.rawValue) Left"
+            
             if !event.hasImage {
                 cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
                 cell.image.image = nil
@@ -261,9 +265,9 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
 //    }
 }
 
-enum TimeMeassure {
-    case days
-    case hours
-    case minutes
-    case seconds
+enum TimeMeassure: String {
+    case days = "Days"
+    case hours = "Hours"
+    case minutes = "Minutes"
+    case seconds = "Seconds"
 }
