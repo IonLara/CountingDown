@@ -182,7 +182,6 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         timeCell.timePicker.date = event.date
         timeCell.timePicker.addTarget(self, action: #selector(updateTime), for: .valueChanged)
         
-        navigationItem.rightBarButtonItem = editButtonItem
         
         eventImage.layer.cornerRadius = 20.0
         eventImage.clipsToBounds = true

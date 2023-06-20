@@ -14,4 +14,16 @@ class EventCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var remainderLabel: UILabel!
     @IBOutlet weak var image: UIImageView!
     
+    //Buttons:
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var shareButton: UIButton!
+    
+    var isEditing = false {
+        didSet {
+            deleteButton.isHidden = !isEditing
+            favoriteButton.isHidden = !isEditing
+            shareButton.isHidden = !isEditing
+        }
+    }
 }

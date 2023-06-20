@@ -19,7 +19,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         
         collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         
-        
+        navigationItem.leftBarButtonItem = editButtonItem
 
         if let savedEvents = Manager.loadEvents() {
             events = savedEvents
@@ -28,6 +28,14 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         }
         favorites = getFavorites()
         collectionView.collectionViewLayout = createLayout()
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
+            let cell = collectionView.cellForItem(at: indexPath) as! EventCollectionViewCell
+            cell.isEditing = isEditing
+        }
     }
     
     func toggleFavorite(_ index: Int, _ adding: Bool) {
@@ -60,11 +68,46 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         return temp
     }
     
+    @objc func deleteEvent(sender: UICollectionViewCell) {
+        let isFav = sender.tag / 1000 == 2
+        if isFav { //Index was taken from favorites section
+            let index = events.firstIndex(of: favorites[sender.tag - 2000])
+            favorites.remove(at: sender.tag - 2000)
+            events.remove(at: index!)
+            collectionView.reloadData()
+        } else { //Index was taken from regular events section
+            if events[sender.tag - 1000].isFavorite {
+                let index = favorites.firstIndex(of: events[sender.tag - 1000])
+                favorites.remove(at: index!)
+            }
+            events.remove(at: sender.tag - 1000)
+            collectionView.reloadData()
+        }
+    }
+    
+    @objc func favoriteEvent(sender: UICollectionViewCell) {
+        let isFav = sender.tag / 1000 == 2
+        if isFav {
+            
+        } else {
+            
+        }
+    }
+    
+    @objc func shareEvent(sender: UICollectionViewCell) {
+        let isFav = sender.tag / 1000 == 2
+        if isFav {
+            
+        } else {
+            
+        }
+    }
+    
     func createLayout() ->UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.45), heightDimension: .fractionalWidth(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.4))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
         
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
@@ -106,20 +149,25 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         detailView?.index = index
         return detailView
     }
-    @IBSegueAction func testSegue(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
-        let detailView = EventDetailViewController(coder: coder)
-        
-        var index = 1
-        detailView?.event = events[index]
-        detailView?.delegate = self
-        detailView?.index = index
-        return detailView
+    @IBSegueAction func createEvent(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
+        let view = EventDetailViewController(coder: coder)
+        events.append(Event())
+        collectionView.reloadSections([1])
+        let index = events.count - 1
+        view?.event = events[index]
+        view?.delegate = self
+        view?.index = index
+        return view
     }
     
     @IBAction func unwindToEventCollection(segue: UIStoryboardSegue, sender: Any?) {
         let detail = sender as! EventDetailViewController
         let newData = detail.event
         events[detail.index] = newData!
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
+        true
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -160,6 +208,10 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             }
             cell.image.layer.cornerRadius = 20
             cell.image.clipsToBounds = true
+            cell.deleteButton.tag = indexPath.item + 2000
+            cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+            
+            cell.isEditing = isEditing
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
@@ -182,6 +234,10 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             }
             cell.image.layer.cornerRadius = 20
             cell.image.clipsToBounds = true
+            cell.deleteButton.tag = indexPath.item + 1000
+            cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+            
+            cell.isEditing = isEditing
             return cell
         }
     }
@@ -200,7 +256,9 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 80)
     }
-    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        CGSize(width: 10, height: 10)
+//    }
 }
 
 enum TimeMeassure {

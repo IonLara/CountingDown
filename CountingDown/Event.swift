@@ -53,6 +53,25 @@ class Event: Codable, Equatable{
         self.firstAlarm = firstAlarm
         self.secondAlarm = secondAlarm
     }
+    init() {
+        id = UUID()
+        title = "New Event"
+        isFavorite = false
+        date = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        hasImage = false
+        colorR = 0.9
+        colorG = 0.9
+        colorB = 0.9
+        colorA = 1
+        imageAddress = ""
+        isImageIncluded = false
+        isAllDay = true
+        tasks = []
+        notes = nil
+        notifications = .never
+        firstAlarm = .none
+        secondAlarm = .none
+    }
 
     enum NotificationCadency: String, Codable {
         case never = "Never"

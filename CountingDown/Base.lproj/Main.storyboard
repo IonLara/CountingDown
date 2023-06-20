@@ -118,14 +118,60 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ym9-yc-SXO" userLabel="DeleteButton">
+                                            <rect key="frame" x="119" y="8" width="45.333333333333485" height="41.333333333333371"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="tintColor" red="0.79730902780000001" green="0.17227336230000001" blue="0.15661379959999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" image="xmark.circle.fill" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
+                                            </state>
+                                            <state key="selected" image="star.fill" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="favoriteTapped:" destination="HHM-DK-cqs" eventType="touchUpInside" id="yiJ-nf-CaQ"/>
+                                            </connections>
+                                        </button>
+                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2v6-Qx-tjK" userLabel="FavoriteButton">
+                                            <rect key="frame" x="2" y="114" width="45.333333333333485" height="41.333333333333371"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" image="star" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
+                                            </state>
+                                            <state key="selected" image="star.fill" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="favoriteTapped:" destination="HHM-DK-cqs" eventType="touchUpInside" id="EQt-Xl-JT0"/>
+                                            </connections>
+                                        </button>
+                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNp-J2-lfL" userLabel="ShareButton">
+                                            <rect key="frame" x="122" y="113" width="40" height="44"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" image="square.and.arrow.up.fill" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
+                                            </state>
+                                            <state key="selected" image="star.fill" catalog="system">
+                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="favoriteTapped:" destination="HHM-DK-cqs" eventType="touchUpInside" id="Zds-9A-OWe"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </collectionViewCellContentView>
                                 <size key="customSize" width="165" height="165"/>
                                 <connections>
+                                    <outlet property="deleteButton" destination="Ym9-yc-SXO" id="qqU-cu-ZYh"/>
+                                    <outlet property="favoriteButton" destination="2v6-Qx-tjK" id="SFh-dk-gR8"/>
                                     <outlet property="image" destination="ZuH-Es-EEk" id="KnU-c5-D3K"/>
                                     <outlet property="nameLabel" destination="D2k-TU-5bg" id="UQ7-C4-O8h"/>
                                     <outlet property="numberLabel" destination="hC4-De-WhL" id="Lle-Mn-hu9"/>
                                     <outlet property="remainderLabel" destination="hBg-6T-91i" id="V9H-PL-LMn"/>
+                                    <outlet property="shareButton" destination="gNp-J2-lfL" id="1YI-yG-cLI"/>
                                     <segue destination="HHM-DK-cqs" kind="show" destinationCreationSelector="showEventDetail:sender:" id="7Dd-hW-QcR"/>
                                 </connections>
                             </collectionViewCell>
@@ -149,7 +195,11 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="My Events" id="tFj-7v-2Su">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="rof-0k-tdL"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="CSY-E4-J3p">
+                            <connections>
+                                <segue destination="HHM-DK-cqs" kind="show" destinationCreationSelector="createEvent:sender:" id="PJQ-Ja-BXj"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GZ0-UJ-z8O" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -324,10 +374,10 @@
                                                 </tableViewCellContentView>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AlarmCell" textLabel="i44-CG-XPH" detailTextLabel="Za8-v0-VzB" style="IBUITableViewCellStyleValue1" id="AmN-Yl-Fg9">
-                                                <rect key="frame" x="0.0" y="424.66667175292969" width="361" height="44"/>
+                                                <rect key="frame" x="0.0" y="424.66667175292969" width="361" height="43.666667938232422"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AmN-Yl-Fg9" id="YH5-BF-WRi">
-                                                    <rect key="frame" x="0.0" y="0.0" width="330.66666666666669" height="44"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="330.66666666666669" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="i44-CG-XPH">
@@ -351,20 +401,20 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NotificationCell" textLabel="W4l-33-Hmy" detailTextLabel="f5J-Os-jae" rowHeight="58" style="IBUITableViewCellStyleValue1" id="ZQO-mx-KlU">
-                                                <rect key="frame" x="0.0" y="468.66667175292969" width="361" height="58"/>
+                                                <rect key="frame" x="0.0" y="468.33333969116211" width="361" height="58"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZQO-mx-KlU" id="fna-bT-NdC">
                                                     <rect key="frame" x="0.0" y="0.0" width="330.66666666666669" height="58"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="W4l-33-Hmy">
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="W4l-33-Hmy">
                                                             <rect key="frame" x="19.999999999999996" y="19" width="34.666666666666664" height="21.666666666666668"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f5J-Os-jae">
+                                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f5J-Os-jae">
                                                             <rect key="frame" x="276.66666666666669" y="19" width="46" height="21.666666666666668"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -392,7 +442,9 @@
                             <constraint firstItem="MnL-b0-5N9" firstAttribute="top" secondItem="O6u-vi-WCn" secondAttribute="top" constant="-16" id="tN8-1B-lcX"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="UHz-gn-5C4"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="UHz-gn-5C4">
+                        <barButtonItem key="rightBarButtonItem" image="square.and.arrow.up" catalog="system" id="LB6-Xu-ErZ"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="eventImage" destination="DYu-9A-vIV" id="y0n-C5-psg"/>
                         <outlet property="favoriteButton" destination="Zm6-KS-rdk" id="wx7-cV-jbN"/>
@@ -522,14 +574,20 @@
             <point key="canvasLocation" x="1208.3969465648854" y="-145.07042253521126"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="PJQ-Ja-BXj"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="circle" catalog="system" width="128" height="123"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
+        <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="123"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
