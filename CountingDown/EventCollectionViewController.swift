@@ -41,9 +41,11 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     func toggleFavorite(_ index: Int, _ adding: Bool) {
         if adding {
             favorites.append(events[index])
+            events[index].isFavorite = true
         } else {
             if let i = favorites.firstIndex(of: events[index]) {
                 favorites.remove(at: i)
+                events[index].isFavorite = false
             }
         }
         
@@ -88,9 +90,16 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     @objc func favoriteEvent(sender: UICollectionViewCell) {
         let isFav = sender.tag / 1000 == 2
         if isFav {
-            
+            let event = favorites[sender.tag - 2000]
+            toggleFavorite(events.firstIndex(of: event)!
+                           , false)
         } else {
-            
+            let index = sender.tag - 1000
+            if events[index].isFavorite {
+                toggleFavorite(index, false)
+            } else {
+                toggleFavorite(index, true)
+            }
         }
     }
     
@@ -214,8 +223,17 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             cell.image.clipsToBounds = true
             cell.opacityView.layer.cornerRadius = 20
             cell.opacityView.clipsToBounds = true
+            
             cell.deleteButton.tag = indexPath.item + 2000
             cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+            
+            cell.favoriteButton.tag = indexPath.item + 2000
+            cell.favoriteButton.addTarget(self, action: #selector(favoriteEvent), for: .touchUpInside)
+            cell.favoriteButton.isSelected = event.isFavorite
+            
+            cell.shareButton.tag = indexPath.item + 2000
+            cell.shareButton.addTarget(self, action: #selector(shareEvent), for: .touchUpInside)
+            
             if event.hasEmoji {
                 cell.emoji.text = event.emoji
             } else {
@@ -251,8 +269,16 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             cell.image.clipsToBounds = true
             cell.opacityView.layer.cornerRadius = 20
             cell.opacityView.clipsToBounds = true
+            
             cell.deleteButton.tag = indexPath.item + 1000
             cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+            
+            cell.favoriteButton.tag = indexPath.item + 1000
+            cell.favoriteButton.addTarget(self, action: #selector(favoriteEvent), for: .touchUpInside)
+            cell.favoriteButton.isSelected = event.isFavorite
+            
+            cell.shareButton.tag = indexPath.item + 1000
+            cell.shareButton.addTarget(self, action: #selector(shareEvent), for: .touchUpInside)
             
             if event.hasEmoji {
                 cell.emoji.text = event.emoji
