@@ -212,7 +212,10 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                 if event.isImageIncluded {
                     cell.image.image = UIImage(named: event.imageLocation)
                 } else {
-                    cell.image.image = UIImage(data: event.imageData!)
+                    if let temp = Data(base64Encoded: event.imageData!) {
+                        let image = UIImage(data: temp)
+                        cell.image.image = UIImage(cgImage: (image?.cgImage)!, scale: image!.scale, orientation: UIImage.Orientation(rawValue: event.imageOrientation!)!)
+                    }
                 }
                 cell.image.layer.borderWidth = 5
                 cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
@@ -258,7 +261,10 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                 if event.isImageIncluded {
                     cell.image.image = UIImage(named: event.imageLocation)
                 } else {
-                    cell.image.image = UIImage(data: event.imageData!)
+                    if let temp = Data(base64Encoded: event.imageData!) {
+                        let image = UIImage(data: temp)
+                        cell.image.image = UIImage(cgImage: (image?.cgImage)!, scale: image!.scale, orientation: UIImage.Orientation(rawValue: event.imageOrientation!)!)
+                    }
                 }
                 cell.image.layer.borderWidth = 5
                 cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)

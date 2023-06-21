@@ -15,7 +15,8 @@ class Event: Codable, Equatable{
     var isFavorite: Bool
     var date: Date
     var hasImage: Bool = false
-    var imageData: Data?
+    var imageData: String?
+    var imageOrientation: Int?
     var hasEmoji: Bool
     var emoji: String
     var colorR: Double = 0.0

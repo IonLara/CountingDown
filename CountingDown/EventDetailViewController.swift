@@ -226,14 +226,14 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         guard let image = info[.originalImage] as? UIImage else {
             fatalError()
         }
-        guard let url = info[.imageURL] as? NSURL else {
-            fatalError()
-        }
         
         eventImage.image = image
         event.hasImage = true
         event.isImageIncluded = false
-        event.imageData = image.pngData()
+        event.imageOrientation = image.imageOrientation.rawValue
+        if let result = image.pngData()?.base64EncodedString() {
+            event.imageData = result
+        }
         
         if event.hasEmoji {
             event.hasEmoji = false
@@ -306,7 +306,11 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             eventImage.image = UIImage(named: event.imageLocation)
             
         } else {
-            eventImage.image = UIImage(data: event.imageData!)
+            if let temp = Data(base64Encoded: event.imageData!) {
+                let image = UIImage(data: temp)
+                eventImage.image = UIImage(cgImage: (image?.cgImage!)!, scale: image!.scale, orientation: UIImage.Orientation(rawValue: event.imageOrientation!)!)
+            }
+            
         }
         eventImage.layer.borderWidth = 5
         eventImage.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
