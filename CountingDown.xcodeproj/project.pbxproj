@@ -22,12 +22,14 @@
 		626563942A392B7D00D45247 /* NotesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563932A392B7D00D45247 /* NotesTableViewCell.swift */; };
 		626563962A3977EE00D45247 /* AlarmTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563952A3977EE00D45247 /* AlarmTableViewController.swift */; };
 		626563982A3C11B000D45247 /* HeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563972A3C11AF00D45247 /* HeaderCollectionReusableView.swift */; };
+		629BAE3F2A4169A500648E9D /* EmojiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629BAE3E2A4169A500648E9D /* EmojiTextField.swift */; };
 		62C055282A2E8F980071331F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C055272A2E8F980071331F /* AppDelegate.swift */; };
 		62C0552A2A2E8F980071331F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C055292A2E8F980071331F /* SceneDelegate.swift */; };
 		62C0552C2A2E8F980071331F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62C0552B2A2E8F980071331F /* ViewController.swift */; };
 		62C0552F2A2E8F980071331F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62C0552D2A2E8F980071331F /* Main.storyboard */; };
 		62C055312A2E8F990071331F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 62C055302A2E8F990071331F /* Assets.xcassets */; };
 		62C055342A2E8F990071331F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 62C055322A2E8F990071331F /* LaunchScreen.storyboard */; };
+		62ED0D302A4271530011BB92 /* Character+IsEmoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ED0D2F2A4271530011BB92 /* Character+IsEmoji.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,7 @@
 		626563932A392B7D00D45247 /* NotesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewCell.swift; sourceTree = "<group>"; };
 		626563952A3977EE00D45247 /* AlarmTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTableViewController.swift; sourceTree = "<group>"; };
 		626563972A3C11AF00D45247 /* HeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		629BAE3E2A4169A500648E9D /* EmojiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTextField.swift; sourceTree = "<group>"; };
 		62C055242A2E8F980071331F /* CountingDown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CountingDown.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62C055272A2E8F980071331F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		62C055292A2E8F980071331F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -54,6 +57,7 @@
 		62C055302A2E8F990071331F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		62C055332A2E8F990071331F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		62C055352A2E8F990071331F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		62ED0D2F2A4271530011BB92 /* Character+IsEmoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Character+IsEmoji.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,8 @@
 				626563882A34483E00D45247 /* NotificationTableViewController.swift */,
 				626563952A3977EE00D45247 /* AlarmTableViewController.swift */,
 				626563972A3C11AF00D45247 /* HeaderCollectionReusableView.swift */,
+				629BAE3E2A4169A500648E9D /* EmojiTextField.swift */,
+				62ED0D2F2A4271530011BB92 /* Character+IsEmoji.swift */,
 				626563922A392B6100D45247 /* Cells */,
 				62C0552D2A2E8F980071331F /* Main.storyboard */,
 				62C055302A2E8F990071331F /* Assets.xcassets */,
@@ -193,6 +199,7 @@
 			files = (
 				6265638F2A3852E900D45247 /* TimeTableViewCell.swift in Sources */,
 				62C0552C2A2E8F980071331F /* ViewController.swift in Sources */,
+				62ED0D302A4271530011BB92 /* Character+IsEmoji.swift in Sources */,
 				6265637F2A2EB82200D45247 /* EventCollectionViewCell.swift in Sources */,
 				626563872A341ACB00D45247 /* TaskTableViewCell.swift in Sources */,
 				6265638B2A38284800D45247 /* DateTableViewCell.swift in Sources */,
@@ -202,6 +209,7 @@
 				626563962A3977EE00D45247 /* AlarmTableViewController.swift in Sources */,
 				626563892A34483E00D45247 /* NotificationTableViewController.swift in Sources */,
 				626563982A3C11B000D45247 /* HeaderCollectionReusableView.swift in Sources */,
+				629BAE3F2A4169A500648E9D /* EmojiTextField.swift in Sources */,
 				626563772A2E9EEE00D45247 /* EventCollectionViewController.swift in Sources */,
 				626563912A3858C100D45247 /* TimeInfoTableViewCell.swift in Sources */,
 				6265637B2A2EA45900D45247 /* Event.swift in Sources */,

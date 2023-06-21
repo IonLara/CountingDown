@@ -36,13 +36,13 @@ struct Manager: Codable {
             year += 1
             date = formatter.date(from: "\(year)/12/25 00:00")
         }
-        events.append(Event(title: "Christmas", isFavorite: false, date: date!, hasImage: false, colorR: 1,colorB: 0, colorG: 0, colorA: 1, imageAddress: "", isImageIncluded: false, isAllDay: true, tasks: [], notes: "Christmas is a wonderful time of year where families get together and celebrate, give each other presents, and eat until they have their fill.", notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
+        events.append(Event(title: "Christmas", isFavorite: false, date: date!, hasImage: false, hasEmoji: true, emoji: "🎅", colorR: 1,colorB: 0, colorG: 0, colorA: 1, imageAddress: "", isImageIncluded: false, isAllDay: true, tasks: [], notes: "Christmas is a wonderful time of year where families get together and celebrate, give each other presents, and eat until they have their fill.", notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
         date = formatter.date(from: "\(year)/10/31 00:00")
         if date! < Date() {
             year += 1
             date = formatter.date(from: "\(year)/10/31 00:00")
         }
-        events.append(Event(title: "Halloween", isFavorite: false, date: date!, hasImage: true, colorR: 1,colorB: 0, colorG: 0.5, colorA: 1, imageAddress: "Halloween", isImageIncluded: true, isAllDay: true, tasks: [], notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
+        events.append(Event(title: "Halloween", isFavorite: false, date: date!, hasImage: true, hasEmoji: false, emoji: "", colorR: 1,colorB: 0, colorG: 0.5, colorA: 1, imageAddress: "Halloween", isImageIncluded: true, isAllDay: true, tasks: [], notifications: .never, firstAlarm: .dayBefore, secondAlarm: .none))
         
         return events
     }

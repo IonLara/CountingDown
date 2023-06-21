@@ -35,6 +35,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var colorWell: UIColorWell!
     
+    @IBOutlet weak var emojiTextField: EmojiTextField!
+    
     var timer = Timer()
     
     @IBAction func endedEditingName(_ sender: UITextField) {
@@ -122,7 +124,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if !nameLabel.isFirstResponder {
+        if !nameLabel.isFirstResponder && !emojiTextField.isFirstResponder {
             guard let userInfo = notification.userInfo else {return}
             guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {return}
             let keyboardFrame = keyboardSize.cgRectValue
@@ -161,15 +163,47 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         alertController.addAction(UIAlertAction(title: "Choose Image", style: .default, handler: {_ in
             self.chooseImage()
         }))
-        alertController.addAction(UIAlertAction(title: "Use Emoji", style: .default, handler: {_ in
+        alertController.addAction(UIAlertAction(title: "Choose Emoji", style: .default, handler: {_ in
             self.useEmoji()
         }))
         present(alertController, animated: true)
     }
     
     func useEmoji() {
-        print("Choosing Emoji")
+        eventImage.image = nil
+        eventImage.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+        emojiTextField.isUserInteractionEnabled = true
+        emojiTextField.becomeFirstResponder()
+        emojiTextField.text = ""
+    }
+    @objc func emojiDone() {
         
+        if let temp = emojiTextField.text?.first?.isEmoji {
+            if temp == true {
+                dismissKeyboard()
+                event.hasEmoji = true
+                event.emoji = emojiTextField.text!
+                event.hasImage = false
+                event.imageAddress = ""
+                emojiTextField.isUserInteractionEnabled = false
+                delegate.updateName(index)
+            }else {
+                emojiTextField.text = ""
+            }
+        } else {
+            emojiTextField.text = ""
+        }
+    }
+    @objc func emojiCanceled() {
+        if !((emojiTextField.text?.first?.isEmoji) != nil) {
+            if event.hasImage {
+                if event.isImageIncluded {
+                    eventImage.image = UIImage(named: event.imageAddress)
+                } else {
+                    //Code to get image
+                }
+            }
+        }
     }
     func chooseImage() {
         print("Choosing Image")
@@ -195,9 +229,14 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        
+        if  event.hasEmoji {
+            emojiTextField.text = "\(event.emoji)"
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -240,6 +279,10 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         
         nameLabel.text = event.title
         favoriteButton.isSelected = event.isFavorite
+        
+        emojiTextField.isUserInteractionEnabled = false
+        emojiTextField.addTarget(self, action: #selector(emojiDone), for: .editingChanged)
+        emojiTextField.addTarget(self, action: #selector(emojiCanceled), for: .editingDidEnd)
         
         tableView.dataSource = self
         tableView.delegate = self

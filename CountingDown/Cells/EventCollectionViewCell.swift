@@ -18,6 +18,8 @@ class EventCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak var opacityView: UIView!
+    @IBOutlet weak var emoji: UILabel!
     
     var isEditing = false {
         didSet {

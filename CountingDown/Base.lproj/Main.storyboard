@@ -92,15 +92,22 @@
                                             <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="😀" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yut-Tx-gRN">
+                                            <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="100"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <view opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AtO-3c-z5S">
                                             <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Event Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D2k-TU-5bg">
-                                            <rect key="frame" x="14" y="23" width="136" height="32"/>
+                                            <rect key="frame" x="10" y="23" width="145" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -112,9 +119,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Minutes   Left" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hBg-6T-91i">
-                                            <rect key="frame" x="8" y="110" width="151" height="32"/>
+                                            <rect key="frame" x="2" y="110" width="163" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -166,10 +173,12 @@
                                 <size key="customSize" width="165" height="165"/>
                                 <connections>
                                     <outlet property="deleteButton" destination="Ym9-yc-SXO" id="qqU-cu-ZYh"/>
+                                    <outlet property="emoji" destination="yut-Tx-gRN" id="b1O-cf-PMP"/>
                                     <outlet property="favoriteButton" destination="2v6-Qx-tjK" id="SFh-dk-gR8"/>
                                     <outlet property="image" destination="ZuH-Es-EEk" id="KnU-c5-D3K"/>
                                     <outlet property="nameLabel" destination="D2k-TU-5bg" id="UQ7-C4-O8h"/>
                                     <outlet property="numberLabel" destination="hC4-De-WhL" id="Lle-Mn-hu9"/>
+                                    <outlet property="opacityView" destination="AtO-3c-z5S" id="Ni8-Ne-q33"/>
                                     <outlet property="remainderLabel" destination="hBg-6T-91i" id="V9H-PL-LMn"/>
                                     <outlet property="shareButton" destination="gNp-J2-lfL" id="1YI-yG-cLI"/>
                                     <segue destination="HHM-DK-cqs" kind="show" destinationCreationSelector="showEventDetail:sender:" id="7Dd-hW-QcR"/>
@@ -432,16 +441,29 @@
                                     </tableView>
                                 </subviews>
                             </stackView>
-                            <colorWell contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eFE-ti-ww5">
+                            <colorWell contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="eFE-ti-ww5">
                                 <rect key="frame" x="330" y="300" width="40" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="7pM-RS-hDn"/>
+                                    <constraint firstAttribute="height" constant="40" id="WIl-dc-t5H"/>
+                                </constraints>
                             </colorWell>
+                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jeu-78-fva" customClass="EmojiTextField" customModule="CountingDown" customModuleProvider="target">
+                                <rect key="frame" x="181" y="142.66666666666666" width="31" height="180.99999999999997"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="150"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MnL-b0-5N9"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="eFE-ti-ww5" firstAttribute="trailing" secondItem="DYu-9A-vIV" secondAttribute="trailing" constant="-7" id="DHX-8E-YRM"/>
                             <constraint firstItem="MnL-b0-5N9" firstAttribute="bottom" secondItem="O6u-vi-WCn" secondAttribute="bottom" constant="16" id="EbE-Jl-1C0"/>
+                            <constraint firstItem="jeu-78-fva" firstAttribute="centerX" secondItem="DYu-9A-vIV" secondAttribute="centerX" id="IpP-tJ-QLH"/>
                             <constraint firstItem="O6u-vi-WCn" firstAttribute="leading" secondItem="MnL-b0-5N9" secondAttribute="leading" constant="16" id="Lir-xW-rky"/>
+                            <constraint firstItem="eFE-ti-ww5" firstAttribute="bottom" secondItem="DYu-9A-vIV" secondAttribute="bottom" constant="-7" id="V1v-kc-IIt"/>
+                            <constraint firstItem="jeu-78-fva" firstAttribute="centerY" secondItem="DYu-9A-vIV" secondAttribute="centerY" id="W2l-Sh-BsT"/>
                             <constraint firstItem="MnL-b0-5N9" firstAttribute="trailing" secondItem="O6u-vi-WCn" secondAttribute="trailing" constant="16" id="ktB-gt-4x2"/>
                             <constraint firstItem="MnL-b0-5N9" firstAttribute="top" secondItem="O6u-vi-WCn" secondAttribute="top" constant="-16" id="tN8-1B-lcX"/>
                         </constraints>
@@ -452,6 +474,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="colorWell" destination="eFE-ti-ww5" id="PPX-Zd-YLj"/>
+                        <outlet property="emojiTextField" destination="jeu-78-fva" id="C4E-X6-Qk5"/>
                         <outlet property="eventImage" destination="DYu-9A-vIV" id="y0n-C5-psg"/>
                         <outlet property="favoriteButton" destination="Zm6-KS-rdk" id="wx7-cV-jbN"/>
                         <outlet property="nameLabel" destination="G8S-Eq-aRV" id="2Ls-7K-Z2z"/>

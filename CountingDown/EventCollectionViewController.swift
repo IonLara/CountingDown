@@ -208,10 +208,19 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                 cell.image.layer.borderWidth = 5
                 cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
             }
+            cell.opacityView.layer.borderWidth = 5
+            cell.opacityView.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
             cell.image.layer.cornerRadius = 20
             cell.image.clipsToBounds = true
+            cell.opacityView.layer.cornerRadius = 20
+            cell.opacityView.clipsToBounds = true
             cell.deleteButton.tag = indexPath.item + 2000
             cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+            if event.hasEmoji {
+                cell.emoji.text = event.emoji
+            } else {
+                cell.emoji.text = ""
+            }
             
             cell.isEditing = isEditing
             return cell
@@ -236,10 +245,20 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                 cell.image.layer.borderWidth = 5
                 cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
             }
+            cell.opacityView.layer.borderWidth = 5
+            cell.opacityView.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
             cell.image.layer.cornerRadius = 20
             cell.image.clipsToBounds = true
+            cell.opacityView.layer.cornerRadius = 20
+            cell.opacityView.clipsToBounds = true
             cell.deleteButton.tag = indexPath.item + 1000
             cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+            
+            if event.hasEmoji {
+                cell.emoji.text = event.emoji
+            } else {
+                cell.emoji.text = ""
+            }
             
             cell.isEditing = isEditing
             return cell

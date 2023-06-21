@@ -15,6 +15,8 @@ class Event: Codable, Equatable{
     var isFavorite: Bool
     var date: Date
     var hasImage: Bool = false
+    var hasEmoji: Bool
+    var emoji: String
     var colorR: Double = 0.0
     var colorB: Double = 0.0
     var colorG: Double = 0.0
@@ -34,12 +36,14 @@ class Event: Codable, Equatable{
         lhs.id == rhs.id
     }
     
-    init(title: String, isFavorite: Bool, date: Date, hasImage: Bool, colorR: Double, colorB: Double, colorG: Double, colorA: Double, imageAddress: String, isImageIncluded: Bool, isAllDay: Bool, tasks: [Task], notes: String? = nil, notifications: NotificationCadency, firstAlarm: AlarmTime, secondAlarm: AlarmTime) {
+    init(title: String, isFavorite: Bool, date: Date, hasImage: Bool, hasEmoji: Bool, emoji: String, colorR: Double, colorB: Double, colorG: Double, colorA: Double, imageAddress: String, isImageIncluded: Bool, isAllDay: Bool, tasks: [Task], notes: String? = nil, notifications: NotificationCadency, firstAlarm: AlarmTime, secondAlarm: AlarmTime) {
         self.id = UUID()
         self.title = title
         self.isFavorite = isFavorite
         self.date = date
         self.hasImage = hasImage
+        self.hasEmoji = hasEmoji
+        self.emoji = emoji
         self.colorR = colorR
         self.colorB = colorB
         self.colorG = colorG
@@ -59,6 +63,8 @@ class Event: Codable, Equatable{
         isFavorite = false
         date = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
         hasImage = false
+        hasEmoji = false
+        emoji = ""
         colorR = 0.9
         colorG = 0.9
         colorB = 0.9
