@@ -15,13 +15,14 @@ class Event: Codable, Equatable{
     var isFavorite: Bool
     var date: Date
     var hasImage: Bool = false
+    var imageData: Data?
     var hasEmoji: Bool
     var emoji: String
     var colorR: Double = 0.0
     var colorB: Double = 0.0
     var colorG: Double = 0.0
     var colorA: Double = 0.0
-    var imageAddress: String = ""
+    var imageLocation: String = ""
     var isImageIncluded: Bool
     var isAllDay: Bool
     var tasks: [Task]
@@ -48,7 +49,7 @@ class Event: Codable, Equatable{
         self.colorB = colorB
         self.colorG = colorG
         self.colorA = colorA
-        self.imageAddress = imageAddress
+        self.imageLocation = imageAddress
         self.isImageIncluded = isImageIncluded
         self.isAllDay = isAllDay
         self.tasks = tasks
@@ -69,7 +70,7 @@ class Event: Codable, Equatable{
         colorG = 0.9
         colorB = 0.9
         colorA = 1
-        imageAddress = ""
+        imageLocation = ""
         isImageIncluded = false
         isAllDay = true
         tasks = []

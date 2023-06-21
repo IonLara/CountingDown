@@ -12,7 +12,7 @@ protocol EventDelegate {
     func updateName(_ index: Int)
 }
 
-class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIColorPickerViewControllerDelegate {
+class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIColorPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var event: Event!
     var delegate: EventDelegate!
@@ -38,6 +38,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var emojiTextField: EmojiTextField!
     
     var timer = Timer()
+    
+    var imagePicker = UIImagePickerController()
     
     @IBAction func endedEditingName(_ sender: UITextField) {
         sender.resignFirstResponder()
@@ -190,7 +192,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 event.hasEmoji = true
                 event.emoji = emojiTextField.text!
                 event.hasImage = false
-                event.imageAddress = ""
+                event.imageLocation = ""
                 emojiTextField.isUserInteractionEnabled = false
                 delegate.updateName(index)
             }else {
@@ -204,7 +206,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         if !((emojiTextField.text?.first?.isEmoji) != nil) {
             if event.hasImage {
                 if event.isImageIncluded {
-                    eventImage.image = UIImage(named: event.imageAddress)
+                    eventImage.image = UIImage(named: event.imageLocation)
                 } else {
                     //Code to get image
                 }
@@ -212,8 +214,36 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     func chooseImage() {
-        print("Choosing Image")
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
+            imagePicker.delegate = self
+            imagePicker.sourceType = .savedPhotosAlbum
+            imagePicker.allowsEditing = false
+            
+            present(imagePicker, animated: true)
+        }
     }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.originalImage] as? UIImage else {
+            fatalError()
+        }
+        guard let url = info[.imageURL] as? NSURL else {
+            fatalError()
+        }
+        
+        eventImage.image = image
+        event.hasImage = true
+        event.isImageIncluded = false
+        event.imageData = image.pngData()
+        
+        if event.hasEmoji {
+            event.hasEmoji = false
+            event.emoji = ""
+            emojiTextField.text = ""
+        }
+        delegate.updateName(index)
+        self.dismiss(animated: true)
+    }
+    
     @objc func colorChanged() {
         let color = colorWell.selectedColor
         eventImage.backgroundColor = color
@@ -273,12 +303,14 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         if event.hasImage == false {
             eventImage.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
         } else if event.isImageIncluded == true {
-            eventImage.image = UIImage(named: event.imageAddress)
-            eventImage.layer.borderWidth = 5
-            eventImage.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+            eventImage.image = UIImage(named: event.imageLocation)
+            
         } else {
-            //Add code to get image from user's phone
+            eventImage.image = UIImage(data: event.imageData!)
         }
+        eventImage.layer.borderWidth = 5
+        eventImage.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+        
         colorWell.selectedColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
         colorWell.supportsAlpha = false
         colorWell.addTarget(self, action: #selector(colorChanged), for: .valueChanged)

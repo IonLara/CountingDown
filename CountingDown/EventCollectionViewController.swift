@@ -91,8 +91,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         let isFav = sender.tag / 1000 == 2
         if isFav {
             let event = favorites[sender.tag - 2000]
-            toggleFavorite(events.firstIndex(of: event)!
-                           , false)
+            toggleFavorite(events.firstIndex(of: event)!, false)
         } else {
             let index = sender.tag - 1000
             if events[index].isFavorite {
@@ -146,6 +145,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         }
         return (meassure, temp)
     }
+    
     @IBSegueAction func showEventDetail(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
         let detailView = EventDetailViewController(coder: coder)
         guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else {return detailView}
@@ -210,9 +210,9 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                 cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
             } else {
                 if event.isImageIncluded {
-                    cell.image.image = UIImage(named: event.imageAddress)
+                    cell.image.image = UIImage(named: event.imageLocation)
                 } else {
-                    //Code to get image from phone
+                    cell.image.image = UIImage(data: event.imageData!)
                 }
                 cell.image.layer.borderWidth = 5
                 cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
@@ -256,9 +256,9 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                 cell.image.layer.borderWidth = 0
             } else {
                 if event.isImageIncluded {
-                    cell.image.image = UIImage(named: event.imageAddress)
+                    cell.image.image = UIImage(named: event.imageLocation)
                 } else {
-                    //Code to get image from phone
+                    cell.image.image = UIImage(data: event.imageData!)
                 }
                 cell.image.layer.borderWidth = 5
                 cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
