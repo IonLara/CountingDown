@@ -157,6 +157,9 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    @objc func dismissAlert() {
+        self.dismiss(animated: true)
+    }
     
     @objc func imageTapped() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -165,6 +168,9 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }))
         alertController.addAction(UIAlertAction(title: "Choose Emoji", style: .default, handler: {_ in
             self.useEmoji()
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {_ in
+            self.dismissAlert()
         }))
         present(alertController, animated: true)
     }
