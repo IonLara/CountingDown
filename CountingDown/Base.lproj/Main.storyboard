@@ -160,10 +160,10 @@
                                             </connections>
                                         </button>
                                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNp-J2-lfL" userLabel="ShareButton">
-                                            <rect key="frame" x="122" y="113" width="40" height="44"/>
+                                            <rect key="frame" x="120" y="116" width="46" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                            <state key="normal" image="square.and.arrow.up.fill" catalog="system">
+                                            <state key="normal" image="calendar.badge.plus" catalog="system">
                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
                                             </state>
                                             <state key="selected" image="star.fill" catalog="system">
@@ -476,7 +476,11 @@
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="UHz-gn-5C4">
                         <nil key="title"/>
-                        <barButtonItem key="rightBarButtonItem" image="square.and.arrow.up" catalog="system" id="LB6-Xu-ErZ"/>
+                        <barButtonItem key="rightBarButtonItem" image="calendar.badge.plus" catalog="system" id="LB6-Xu-ErZ">
+                            <connections>
+                                <action selector="syncTapped:" destination="HHM-DK-cqs" id="vUj-EK-C2y"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="colorWell" destination="eFE-ti-ww5" id="PPX-Zd-YLj"/>
@@ -485,6 +489,7 @@
                         <outlet property="favoriteButton" destination="Zm6-KS-rdk" id="wx7-cV-jbN"/>
                         <outlet property="nameLabel" destination="G8S-Eq-aRV" id="2Ls-7K-Z2z"/>
                         <outlet property="remainLabel" destination="VTQ-1A-CQH" id="azO-38-1Rn"/>
+                        <outlet property="syncButton" destination="LB6-Xu-ErZ" id="fJR-ev-GHw"/>
                         <outlet property="tableView" destination="hlQ-1V-iLD" id="S2p-LC-sIZ"/>
                     </connections>
                 </viewController>
@@ -614,13 +619,12 @@
         <segue reference="PJQ-Ja-BXj"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="calendar.badge.plus" catalog="system" width="128" height="108"/>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="circle" catalog="system" width="128" height="123"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="plus.circle.fill" catalog="system" width="128" height="123"/>
-        <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>
-        <image name="square.and.arrow.up.fill" catalog="system" width="115" height="128"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <image name="xmark.circle.fill" catalog="system" width="128" height="123"/>

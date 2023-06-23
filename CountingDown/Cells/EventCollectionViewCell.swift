@@ -18,6 +18,7 @@ class EventCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
+    @IBOutlet weak var syncedButton: UIButton!
     @IBOutlet weak var opacityView: UIView!
     @IBOutlet weak var editView: UIView!
     @IBOutlet weak var emoji: UILabel!

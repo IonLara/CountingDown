@@ -11,6 +11,8 @@ protocol EventDelegate {
     func toggleFavorite(_ index: Int, _ adding: Bool)
     func updateName(_ index: Int)
     func saveEvents()
+    func updateCalendar(_ event: Event, _ delete: Bool)
+    func syncEvent(_ event: Event) -> Bool
 }
 
 class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIColorPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -35,6 +37,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var remainLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var colorWell: UIColorWell!
+    @IBOutlet weak var syncButton: UIBarButtonItem!
     
     @IBOutlet weak var emojiTextField: EmojiTextField!
     
@@ -46,6 +49,15 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         sender.resignFirstResponder()
         Manager.shared.scheduleNotification(event)
         delegate.saveEvents()
+        delegate.updateCalendar(event, false)
+    }
+    @IBAction func syncTapped(_ sender: Any) {
+        if !event.isSynced {
+            let temp = delegate.syncEvent(event)
+            if temp {
+                syncButton.image = UIImage(systemName: "checkmark.icloud.fill")
+            }
+        }
     }
     @IBAction func favoriteTapped(_ sender: UIButton) {
         event.isFavorite.toggle()
@@ -94,6 +106,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         timeCell.timePicker.date = dateCell.datePicker.date
         delegate.updateName(index)
         delegate.saveEvents()
+        delegate.updateCalendar(event, false)
     }
     
     @objc func updateAllDay() {
@@ -103,6 +116,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         Manager.shared.scheduleAlarm(event, true)
         Manager.shared.scheduleAlarm(event, false)
         delegate.saveEvents()
+        delegate.updateCalendar(event, false)
         if !isTimeOpen {
             event.date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: timeCell.timePicker.date)!
         }
@@ -159,6 +173,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         event.title = nameLabel.text == "" || nameLabel.text == nil ? "Untitled" : nameLabel.text!
         delegate.updateName(index)
         delegate.saveEvents()
+        delegate.updateCalendar(event, false)
     }
     
     @objc func dismissKeyboard() {
@@ -279,6 +294,10 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
+        if event.isSynced {
+            syncButton.image = UIImage(systemName: "checkmark.icloud.fill")
+        }
+
         if  event.hasEmoji {
             emojiTextField.text = "\(event.emoji)"
         }
@@ -525,5 +544,6 @@ extension EventDetailViewController: UITextViewDelegate {
     }
     func textViewDidEndEditing(_ textView: UITextView) {
         delegate.saveEvents()
+        delegate.updateCalendar(event, false)
     }
 }

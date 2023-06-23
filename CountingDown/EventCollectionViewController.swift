@@ -7,6 +7,7 @@
 
 import UIKit
 import UserNotifications
+import EventKit
 
 private let reuseIdentifier = "EventCell"
 
@@ -18,6 +19,8 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     
     var favorites = [Event]()
     var sorting: SortMethod = .created
+    
+    let store = EKEventStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +37,11 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                     print("D'oh")
                 }
             }
+        
+
+        store.requestAccess(to: .event, completion: { granted, error in
+            // Handle the response to the request.
+        })
         
         if let savedEvents = Manager.loadEvents() {
             events = savedEvents
@@ -127,7 +135,10 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         if isFav { //Index was taken from favorites section
             let index = events.firstIndex(of: favorites[sender.tag - 2000])
             favorites.remove(at: sender.tag - 2000)
+            let event = events[index!]
+            updateCalendar(event, true)
             events.remove(at: index!)
+            Manager.shared.cancelNotifications("\(events[index!].id)")
             collectionView.reloadData()
         } else { //Index was taken from regular events section
             if events[sender.tag - 1000].isFavorite {
@@ -136,12 +147,15 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             }
             let id = "\(events[sender.tag - 1000].id)"
             Manager.shared.cancelNotifications(id)
+            let event = events[sender.tag - 1000]
+            updateCalendar(event, true)
             events.remove(at: sender.tag - 1000)
             collectionView.reloadData()
         }
         if events.count == 0 {
             setEditing(false, animated: true)
         }
+        saveEvents()
     }
     
     @objc func favoriteEvent(sender: UICollectionViewCell) {
@@ -184,10 +198,79 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     @objc func shareEvent(sender: UICollectionViewCell) {
         let isFav = sender.tag / 1000 == 2
         if isFav {
-            
+            let event = favorites[sender.tag - 2000]
+            syncEvent(event)
         } else {
-            
+            let index = sender.tag - 1000
+            switch sorting {
+            case .title:
+                syncEvent(eventsByTitle[index])
+            case .time:
+                syncEvent(eventsByTime[index])
+            case .created:
+                syncEvent(events[index])
+            }
         }
+    }
+    
+    func updateCalendar(_ event: Event, _ delete: Bool) {
+        if event.isSynced {
+            //Update data
+            if delete {
+                //Delete
+                if let calEvent = store.event(withIdentifier: event.calendarID!) {
+                    do {
+                        try store.remove(calEvent, span: .thisEvent)
+                    } catch {
+                        print("Could not desync.")
+                    }
+                }
+            } else {
+                print(event.calendarID)
+                if let calEvent = store.event(withIdentifier: event.calendarID!) {
+                    calEvent.title = event.title
+                    calEvent.isAllDay = event.isAllDay
+                    calEvent.startDate = event.date
+                    calEvent.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: event.date)
+                    calEvent.notes = event.notes
+                    
+                    do {
+                        try store.save(calEvent, span: .thisEvent)
+                    } catch {
+                        print("Could not sync to calendar.")
+                    }
+                }
+            }
+        }
+    }
+    
+    func syncEvent(_ event: Event) -> Bool{
+        //Create new data
+        if !event.isSynced {
+            print("Event created")
+            let calEvent = EKEvent(eventStore: store)
+            
+
+            calEvent.title = event.title
+            calEvent.isAllDay = event.isAllDay
+            calEvent.startDate = event.date
+            calEvent.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: event.date)
+            calEvent.notes = event.notes
+            calEvent.calendar = store.defaultCalendarForNewEvents
+            do {
+                try store.save(calEvent, span: .thisEvent)
+                saveEvents()
+                event.isSynced = true
+                event.calendarID = calEvent.eventIdentifier
+                collectionView.reloadData()
+                print(event.isSynced)
+                return true
+            } catch {
+                print("Could not sync to calendar.")
+                return false
+            }
+        }
+        return true
     }
     
     func saveEvents() {
@@ -365,6 +448,8 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             
             cell.shareButton.tag = indexPath.item + 2000
             cell.shareButton.addTarget(self, action: #selector(shareEvent), for: .touchUpInside)
+            cell.shareButton.isHidden = event.isSynced
+            cell.syncedButton.isHidden = !event.isSynced
             
             if event.hasEmoji {
                 cell.emoji.text = event.emoji
@@ -425,6 +510,14 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             
             cell.shareButton.tag = indexPath.item + 1000
             cell.shareButton.addTarget(self, action: #selector(shareEvent), for: .touchUpInside)
+            if event.isSynced {
+                cell.shareButton.setImage(UIImage(systemName: "checkmark.icloud.fill"), for: .normal)
+                cell.shareButton.isEnabled = false
+            } else {
+                cell.shareButton.setImage(UIImage(systemName: "calendar.badge.plus"), for: .normal)
+                cell.shareButton.isEnabled = true
+            }
+            
             
             if event.hasEmoji {
                 cell.emoji.text = event.emoji

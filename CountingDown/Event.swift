@@ -40,6 +40,9 @@ class Event: Codable, Equatable{
     var firstAlarm: AlarmTime
     var secondAlarm: AlarmTime
     
+    var calendarID: String?
+    var isSynced: Bool = false
+    
     static func ==(lhs: Event, rhs: Event) -> Bool {
         lhs.id == rhs.id
     }
