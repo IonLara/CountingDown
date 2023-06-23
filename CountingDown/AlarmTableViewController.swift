@@ -32,6 +32,7 @@ class AlarmTableViewController: UITableViewController {
             event.secondAlarm = Event.AlarmTime.all[indexPath.row]
             editView.tableView.reloadRows(at: [[1,2]], with: .automatic)
         }
+        Manager.shared.scheduleAlarm(event,isFirst)
         dismiss(animated: true)
     }
     

@@ -49,6 +49,46 @@ struct Manager: Codable {
         
         return events
     }
+    func scheduleAlarm(_ event: Event, _ first: Bool) {
+//        var date = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: event.date)!
+        var date = event.date
+        let alarm = first ? event.firstAlarm : event.secondAlarm
+        let index = first ? 1 : 2
+        switch alarm {
+        case .none:
+            return
+        case .tenMin:
+            date = Calendar.current.date(byAdding: .minute, value: -10, to: date)!
+        case .halfHour:
+            date = Calendar.current.date(byAdding: .minute, value: -30, to: date)!
+        case .oneHour:
+            date = Calendar.current.date(byAdding: .hour, value: -1, to: date)!
+        case .sixHours:
+            date = Calendar.current.date(byAdding: .hour, value: -6, to: date)!
+        case .dayBefore:
+            date = Calendar.current.date(byAdding: .day, value: -1, to: date)!
+        }
+        
+        var comps = DateComponents()
+        comps.year = Calendar.current.component(.year, from: date)
+        comps.month = Calendar.current.component(.month, from: date)
+        comps.day = Calendar.current.component(.day, from: date)
+        comps.hour = Calendar.current.component(.hour, from: date)
+        comps.minute = Calendar.current.component(.minute, from: date)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+        
+        let content = UNMutableNotificationContent()
+        content.title = "\(event.title.capitalized) - Alarm"
+        content.sound = .defaultRingtone
+        
+        let request = UNNotificationRequest(identifier: "\(event.id)-Alarm-\(index)", content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) {(error: Error?) in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     func scheduleNotification(_ event: Event) {
         let hour = event.isAllDay ? 12 : Calendar.current.component(.hour, from: event.date)
@@ -76,6 +116,7 @@ struct Manager: Codable {
             }
             
             var comps = DateComponents()
+            comps.year = Calendar.current.component(.year, from: date)
             comps.month = Calendar.current.component(.month, from: date)
             comps.day = Calendar.current.component(.day, from: date)
             comps.hour = Calendar.current.component(.hour, from: date)

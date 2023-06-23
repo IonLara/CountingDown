@@ -89,6 +89,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         dateInfoCell.contentConfiguration = content
         event.date = dateCell.datePicker.date
         Manager.shared.scheduleNotification(event)
+        Manager.shared.scheduleAlarm(event, true)
+        Manager.shared.scheduleAlarm(event, false)
         timeCell.timePicker.date = dateCell.datePicker.date
         delegate.updateName(index)
         delegate.saveEvents()
@@ -98,6 +100,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         isTimeOpen.toggle()
         event.isAllDay.toggle()
         Manager.shared.scheduleNotification(event)
+        Manager.shared.scheduleAlarm(event, true)
+        Manager.shared.scheduleAlarm(event, false)
         delegate.saveEvents()
         if !isTimeOpen {
             event.date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: timeCell.timePicker.date)!
@@ -111,6 +115,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func updateTime() {
         event.date = timeCell.timePicker.date
         Manager.shared.scheduleNotification(event)
+        Manager.shared.scheduleAlarm(event, true)
+        Manager.shared.scheduleAlarm(event, false)
         
         dateCell.datePicker.date = timeCell.timePicker.date
         delegate.updateName(index)
