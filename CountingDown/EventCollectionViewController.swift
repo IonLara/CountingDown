@@ -190,6 +190,10 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         }
     }
     
+    func saveEvents() {
+        Manager.saveEvents(events)
+    }
+    
     @objc func sortEvents() {
         let alert = UIAlertController(title: "Sort By:", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Date of Creation", style: .default, handler: {_ in

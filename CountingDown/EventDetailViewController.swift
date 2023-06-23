@@ -10,6 +10,7 @@ import UIKit
 protocol EventDelegate {
     func toggleFavorite(_ index: Int, _ adding: Bool)
     func updateName(_ index: Int)
+    func saveEvents()
 }
 
 class EventDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIColorPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -44,12 +45,14 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @IBAction func endedEditingName(_ sender: UITextField) {
         sender.resignFirstResponder()
         Manager.shared.scheduleNotification(event)
+        delegate.saveEvents()
     }
     @IBAction func favoriteTapped(_ sender: UIButton) {
         event.isFavorite.toggle()
         favoriteButton.isSelected = event.isFavorite
         
         delegate.toggleFavorite(index, event.isFavorite)
+        delegate.saveEvents()
     }
     @IBSegueAction func showNotifications(_ coder: NSCoder, sender: Any?) -> NotificationTableViewController? {
         let notifications = NotificationTableViewController(coder: coder)
@@ -88,12 +91,14 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         Manager.shared.scheduleNotification(event)
         timeCell.timePicker.date = dateCell.datePicker.date
         delegate.updateName(index)
+        delegate.saveEvents()
     }
     
     @objc func updateAllDay() {
         isTimeOpen.toggle()
         event.isAllDay.toggle()
         Manager.shared.scheduleNotification(event)
+        delegate.saveEvents()
         if !isTimeOpen {
             event.date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: timeCell.timePicker.date)!
         }
@@ -106,6 +111,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func updateTime() {
         event.date = timeCell.timePicker.date
         Manager.shared.scheduleNotification(event)
+        
         dateCell.datePicker.date = timeCell.timePicker.date
         delegate.updateName(index)
     }
@@ -140,11 +146,13 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         }
         event.tasks[temp.index].description = textField.text!
         event.tasks[temp.index].isComplete = temp.taskButton.isSelected
+        delegate.saveEvents()
     }
     
     @objc func updateEventName() {
         event.title = nameLabel.text == "" || nameLabel.text == nil ? "Untitled" : nameLabel.text!
         delegate.updateName(index)
+        delegate.saveEvents()
     }
     
     @objc func dismissKeyboard() {
@@ -192,6 +200,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         } else {
             emojiTextField.text = ""
         }
+        delegate.saveEvents()
     }
     @objc func emojiCanceled() {
         if !((emojiTextField.text?.first?.isEmoji) != nil) {
@@ -203,6 +212,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
                 }
             }
         }
+        delegate.saveEvents()
     }
     func chooseImage() {
         if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
@@ -232,6 +242,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             emojiTextField.text = ""
         }
         delegate.updateName(index)
+        delegate.saveEvents()
         self.dismiss(animated: true)
     }
     
@@ -252,6 +263,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         event.colorA = 1
         
         delegate.updateName(index)
+        delegate.saveEvents()
     }
     
     override func viewDidLoad() {
@@ -327,6 +339,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     override func viewWillDisappear(_ animated: Bool) {
         timer.invalidate()
+        delegate.saveEvents()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -432,6 +445,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
             if let notes = event.notes {
 
                 noteCell.textField.text = notes
+                noteCell.textField.textColor = .black
             } else {
                 noteCell.textField.text = "No notes..."
                 noteCell.textField.textColor = .lightGray
@@ -485,6 +499,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         if editingStyle == .delete {
             event.tasks.remove(at: indexPath.row - 1)
             tableView.reloadSections([2], with: .automatic)
+            delegate.saveEvents()
         }
     }
 }
@@ -501,5 +516,8 @@ extension EventDetailViewController: UITextViewDelegate {
             textView.text = nil
             textView.textColor = .black
         }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        delegate.saveEvents()
     }
 }
