@@ -125,6 +125,11 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0AI-gV-5Mz">
+                                            <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        </view>
                                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ym9-yc-SXO" userLabel="DeleteButton">
                                             <rect key="frame" x="119" y="8" width="45.333333333333485" height="41.333333333333371"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -173,6 +178,7 @@
                                 <size key="customSize" width="165" height="165"/>
                                 <connections>
                                     <outlet property="deleteButton" destination="Ym9-yc-SXO" id="qqU-cu-ZYh"/>
+                                    <outlet property="editView" destination="0AI-gV-5Mz" id="bDw-ba-9EN"/>
                                     <outlet property="emoji" destination="yut-Tx-gRN" id="b1O-cf-PMP"/>
                                     <outlet property="favoriteButton" destination="2v6-Qx-tjK" id="SFh-dk-gR8"/>
                                     <outlet property="image" destination="ZuH-Es-EEk" id="KnU-c5-D3K"/>
@@ -185,7 +191,7 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="Header" id="I8T-oJ-Avg" customClass="HeaderCollectionReusableView" customModule="CountingDown" customModuleProvider="target">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="" id="I8T-oJ-Avg" customClass="HeaderCollectionReusableView" customModule="CountingDown" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
@@ -193,7 +199,7 @@
                                     <rect key="frame" x="175" y="15" width="42" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <nil key="textColor"/>
+                                    <color key="textColor" systemColor="systemGray4Color"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
@@ -623,6 +629,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

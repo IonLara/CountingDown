@@ -106,17 +106,26 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         content.secondaryText = formattedDate
         dateInfoCell.contentConfiguration = content
         event.date = dateCell.datePicker.date
+        timeCell.timePicker.date = dateCell.datePicker.date
+        delegate.updateName(index)
     }
     
     @objc func updateAllDay() {
         isTimeOpen.toggle()
         event.isAllDay.toggle()
+        if !isTimeOpen {
+            event.date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: timeCell.timePicker.date)!
+        }
+        
         updateDatePicker()
+        
         tableView.reloadData()
     }
     
     @objc func updateTime() {
         event.date = timeCell.timePicker.date
+        dateCell.datePicker.date = timeCell.timePicker.date
+        delegate.updateName(index)
     }
     
     @objc func notesBeganEditing() {
@@ -286,7 +295,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         isTimeOpen = !event.isAllDay
         
         dateCell.datePicker.date = event.date
-        dateCell.datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
+        let temp = Calendar.current.date(byAdding: .day, value: 1, to: Date())
+        dateCell.datePicker.minimumDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: temp!)!
         dateCell.datePicker.addTarget(self, action: #selector(updateDatePicker), for: .valueChanged)
         dateCell.accessoryType = .disclosureIndicator
         
@@ -294,6 +304,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         timeInfoCell.allDaySwitch.addTarget(self, action: #selector(updateAllDay), for: .valueChanged)
         timeCell.timePicker.date = event.date
         timeCell.timePicker.addTarget(self, action: #selector(updateTime), for: .valueChanged)
+        
         
         
         eventImage.layer.cornerRadius = 20.0

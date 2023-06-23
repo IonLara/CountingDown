@@ -19,6 +19,7 @@ class EventCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var opacityView: UIView!
+    @IBOutlet weak var editView: UIView!
     @IBOutlet weak var emoji: UILabel!
     
     var isEditing = false {
@@ -26,6 +27,7 @@ class EventCollectionViewCell: UICollectionViewCell {
             deleteButton.isHidden = !isEditing
             favoriteButton.isHidden = !isEditing
             shareButton.isHidden = !isEditing
+            editView.isHidden = !isEditing
         }
     }
 }

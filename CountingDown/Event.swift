@@ -25,7 +25,13 @@ class Event: Codable, Equatable{
     var colorA: Double = 0.0
     var imageLocation: String = ""
     var isImageIncluded: Bool
-    var isAllDay: Bool
+    var isAllDay: Bool {
+        didSet {
+            if isAllDay == false {
+                date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+            }
+        }
+    }
     var tasks: [Task]
     var notes: String?
     
@@ -63,7 +69,8 @@ class Event: Codable, Equatable{
         id = UUID()
         title = "New Event"
         isFavorite = false
-        date = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        let temp = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: temp)!
         hasImage = false
         hasEmoji = false
         emoji = ""

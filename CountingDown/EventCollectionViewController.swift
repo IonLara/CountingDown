@@ -12,7 +12,11 @@ private let reuseIdentifier = "EventCell"
 class EventCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, EventDelegate{
     
     var events = [Event]()
+    var eventsByTitle = [Event]()
+    var eventsByTime = [Event]()
+    
     var favorites = [Event]()
+    var sorting: SortMethod = .created
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,41 +24,80 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         collectionView.register(HeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         
         navigationItem.leftBarButtonItem = editButtonItem
+        
+        
 
         if let savedEvents = Manager.loadEvents() {
             events = savedEvents
         } else {
             events = Manager.loadBaseEvents()
         }
+        eventsByTitle = events.sorted(by: {$0.title < $1.title})
+        eventsByTime = events.sorted(by: {$0.date < $1.date})
         favorites = getFavorites()
         collectionView.collectionViewLayout = createLayout()
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
-            let cell = collectionView.cellForItem(at: indexPath) as! EventCollectionViewCell
-            cell.isEditing = isEditing
+        if events.count > 0 || editing == false {
+            super.setEditing(editing, animated: animated)
+            collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
+                let cell = collectionView.cellForItem(at: indexPath) as! EventCollectionViewCell
+                cell.isEditing = isEditing
+            }
         }
     }
     
     func toggleFavorite(_ index: Int, _ adding: Bool) {
         if adding {
-            favorites.append(events[index])
-            events[index].isFavorite = true
+            switch sorting {
+            case .title:
+                favorites.append(eventsByTitle[index])
+                eventsByTitle[index].isFavorite = true
+            case .time:
+                favorites.append(eventsByTime[index])
+                eventsByTime[index].isFavorite = true
+            case .created:
+                favorites.append(events[index])
+                events[index].isFavorite = true
+            }
         } else {
-            if let i = favorites.firstIndex(of: events[index]) {
-                favorites.remove(at: i)
-                events[index].isFavorite = false
+            switch sorting {
+            case .title:
+                if let i = favorites.firstIndex(of: eventsByTitle[index]) {
+                    favorites.remove(at: i)
+                    
+                    eventsByTitle[index].isFavorite = false
+                }
+            case .time:
+                if let i = favorites.firstIndex(of: eventsByTime[index]) {
+                    favorites.remove(at: i)
+                    
+                    eventsByTime[index].isFavorite = false
+                }
+            case .created:
+                if let i = favorites.firstIndex(of: events[index]) {
+                    favorites.remove(at: i)
+                    events[index].isFavorite = false
+                }
             }
         }
         
         collectionView.reloadData()
-//        collectionView.insertItems(at: [[0,0]])
-        
     }
     func updateName(_ index: Int) {
-        collectionView.reloadItems(at: [[1,index]])
+        updateArrays()
+        switch sorting {
+        case .title:
+//            collectionView.reloadItems(at: [[1, eventsByTitle.firstIndex(of: events[index])!]])
+            collectionView.reloadSections([1])
+        case .time:
+//            collectionView.reloadItems(at: [[1, eventsByTime.firstIndex(of: events[index])!]])
+            collectionView.reloadSections([1])
+        case .created:
+//            collectionView.reloadItems(at: [[1,index]])
+            collectionView.reloadSections([1])
+        }
         if favorites.contains(events[index]) {
             collectionView.reloadItems(at: [[0, favorites.firstIndex(of: events[index])!]])
         }
@@ -85,19 +128,44 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             events.remove(at: sender.tag - 1000)
             collectionView.reloadData()
         }
+        if events.count == 0 {
+            setEditing(false, animated: true)
+        }
     }
     
     @objc func favoriteEvent(sender: UICollectionViewCell) {
         let isFav = sender.tag / 1000 == 2
         if isFav {
             let event = favorites[sender.tag - 2000]
-            toggleFavorite(events.firstIndex(of: event)!, false)
+            switch sorting {
+            case .title:
+                toggleFavorite(eventsByTitle.firstIndex(of: event)!, false)
+            case .time:
+                toggleFavorite(eventsByTime.firstIndex(of: event)!, false)
+            case .created:
+                toggleFavorite(events.firstIndex(of: event)!, false)
+            }
         } else {
             let index = sender.tag - 1000
-            if events[index].isFavorite {
-                toggleFavorite(index, false)
-            } else {
-                toggleFavorite(index, true)
+            switch sorting {
+            case .title:
+                if eventsByTitle[index].isFavorite {
+                    toggleFavorite(index, false)
+                } else {
+                    toggleFavorite(index, true)
+                }
+            case .time:
+                if eventsByTime[index].isFavorite {
+                    toggleFavorite(index, false)
+                } else {
+                    toggleFavorite(index, true)
+                }
+            case .created:
+                if events[index].isFavorite {
+                    toggleFavorite(index, false)
+                } else {
+                    toggleFavorite(index, true)
+                }
             }
         }
     }
@@ -109,6 +177,28 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         } else {
             
         }
+    }
+    
+    @objc func sortEvents() {
+        let alert = UIAlertController(title: "Sort By:", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Date of Creation", style: .default, handler: {_ in
+            //Add stuff here
+            self.sorting = .created
+            self.collectionView.reloadSections([1])
+        }))
+        alert.addAction(UIAlertAction(title: "Date of Event", style: .default, handler: {_ in
+            self.sorting = .time
+            self.collectionView.reloadSections([1])
+        }))
+        alert.addAction(UIAlertAction(title: "Title", style: .default, handler: {_ in
+            //Add stuff here
+            self.sorting = .title
+            self.collectionView.reloadSections([1])
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {_ in
+            self.dismiss(animated: true)
+        }))
+        self.present(alert, animated: true)
     }
     
     func createLayout() ->UICollectionViewCompositionalLayout {
@@ -151,9 +241,27 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else {return detailView}
         var index = indexPath.item
         if indexPath.section == 0 {
-            index = events.firstIndex(of: favorites[index])!
+            switch sorting {
+            case .title:
+                index = eventsByTitle.firstIndex(of: favorites[index])!
+            case .time:
+                index = eventsByTime.firstIndex(of: favorites[index])!
+            case .created:
+                index = events.firstIndex(of: favorites[index])!
+            }
+            
         }
-        detailView?.event = events[index]
+        
+        var event: Event!
+        switch sorting {
+        case .title:
+            event = eventsByTitle[index]
+        case .time:
+            event = eventsByTime[index]
+        case .created:
+            event = events[index]
+        }
+        detailView?.event = event
         detailView?.delegate = self
         detailView?.index = index
         return detailView
@@ -161,12 +269,18 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     @IBSegueAction func createEvent(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
         let view = EventDetailViewController(coder: coder)
         events.append(Event())
+        updateArrays()
         collectionView.reloadSections([1])
         let index = events.count - 1
         view?.event = events[index]
         view?.delegate = self
         view?.index = index
         return view
+    }
+    
+    func updateArrays() {
+        eventsByTime = events.sorted(by: {$0.date < $1.date})
+        eventsByTitle = events.sorted(by: {$0.title < $1.title})
     }
     
     @IBAction func unwindToEventCollection(segue: UIStoryboardSegue, sender: Any?) {
@@ -247,7 +361,17 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
-            let event = events[indexPath.item]
+            
+            var event: Event!
+            switch sorting {
+            case .title:
+                event = eventsByTitle[indexPath.item]
+            case .time:
+                event = eventsByTime[indexPath.item]
+            case .created:
+                event = events[indexPath.item]
+            }
+            
             cell.nameLabel.text = event.title
             let temp = getTime(event.date.timeIntervalSinceNow)
             cell.numberLabel.text = "\(temp.1)"
@@ -279,6 +403,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             cell.deleteButton.tag = indexPath.item + 1000
             cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
             
+           
             cell.favoriteButton.tag = indexPath.item + 1000
             cell.favoriteButton.addTarget(self, action: #selector(favoriteEvent), for: .touchUpInside)
             cell.favoriteButton.isSelected = event.isFavorite
@@ -300,12 +425,15 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath) as! HeaderCollectionReusableView
         if indexPath.section == 0 {
             headerView.label.text = "Favorites"
+            headerView.button.isHidden = true
         } else {
             headerView.label.text = "Events"
+            headerView.button.isHidden = false
+            headerView.button.addTarget(self, action: #selector(sortEvents), for: .touchUpInside)
         }
         headerView.label.font = .boldSystemFont(ofSize: 28)
         headerView.label.textColor = .darkGray
-        
+
         return headerView
     }
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -321,4 +449,9 @@ enum TimeMeassure: String {
     case hours = "Hours"
     case minutes = "Minutes"
     case seconds = "Seconds"
+}
+enum SortMethod {
+    case title
+    case time
+    case created
 }
