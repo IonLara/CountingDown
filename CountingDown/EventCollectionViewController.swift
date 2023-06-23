@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 private let reuseIdentifier = "EventCell"
 
@@ -25,8 +26,15 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         
         navigationItem.leftBarButtonItem = editButtonItem
         
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                if granted {
+                    print("Yay!")
+                } else {
+                    print("D'oh")
+                }
+            }
         
-
         if let savedEvents = Manager.loadEvents() {
             events = savedEvents
         } else {
@@ -36,6 +44,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         eventsByTime = events.sorted(by: {$0.date < $1.date})
         favorites = getFavorites()
         collectionView.collectionViewLayout = createLayout()
+        
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -125,6 +134,8 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
                 let index = favorites.firstIndex(of: events[sender.tag - 1000])
                 favorites.remove(at: index!)
             }
+            let id = "\(events[sender.tag - 1000].id)"
+            Manager.shared.cancelNotifications(id)
             events.remove(at: sender.tag - 1000)
             collectionView.reloadData()
         }

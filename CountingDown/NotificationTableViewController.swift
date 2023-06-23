@@ -43,6 +43,7 @@ class NotificationTableViewController: UITableViewController {
             event.notifications = current
         }
         editView.tableView.reloadRows(at: [[1,0]], with: .automatic)
+        Manager.shared.scheduleNotification(event)
         dismiss(animated: true)
     }
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

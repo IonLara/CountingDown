@@ -43,6 +43,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     @IBAction func endedEditingName(_ sender: UITextField) {
         sender.resignFirstResponder()
+        Manager.shared.scheduleNotification(event)
     }
     @IBAction func favoriteTapped(_ sender: UIButton) {
         event.isFavorite.toggle()
@@ -75,29 +76,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func updater() {
-        updateRemain()
-    }
-    
-    func getTimeLeft() -> (Int, Int, Int, Int) {
-        var seconds = Double(event.date.timeIntervalSinceNow)
-        let days = seconds / 86_400
-        seconds = seconds.truncatingRemainder(dividingBy: 86_400)
-        let hours = seconds / 3_600
-        seconds = seconds.truncatingRemainder(dividingBy: 3_600)
-        let minutes = seconds / 60
-        seconds = seconds.truncatingRemainder(dividingBy: 60)
-        
-        return (Int(days), Int(hours), Int(minutes), Int(seconds))
-    }
-    
-    func updateRemain() {
-        let time = getTimeLeft()
-        let days = time.0 < 1 ? "" : "\(time.0) Days, "
-        let hours = days == "" && time.1 < 1 ? "" : "\(time.1) Hours, "
-        let minutes = hours == "" && time.2 < 1 ? "" : "\(time.2) Minutes, "
-        let seconds = "\(time.3) Seconds Left."
-        
-        remainLabel.text = "\(days)\(hours)\(minutes)\(seconds)"
+        remainLabel.text = Manager.shared.updateRemain(event)
     }
     
     @objc func updateDatePicker() {
@@ -106,6 +85,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         content.secondaryText = formattedDate
         dateInfoCell.contentConfiguration = content
         event.date = dateCell.datePicker.date
+        Manager.shared.scheduleNotification(event)
         timeCell.timePicker.date = dateCell.datePicker.date
         delegate.updateName(index)
     }
@@ -113,6 +93,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func updateAllDay() {
         isTimeOpen.toggle()
         event.isAllDay.toggle()
+        Manager.shared.scheduleNotification(event)
         if !isTimeOpen {
             event.date = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: timeCell.timePicker.date)!
         }
@@ -124,6 +105,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     @objc func updateTime() {
         event.date = timeCell.timePicker.date
+        Manager.shared.scheduleNotification(event)
         dateCell.datePicker.date = timeCell.timePicker.date
         delegate.updateName(index)
     }
@@ -340,7 +322,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.dataSource = self
         tableView.delegate = self
         
-        updateRemain()
+        remainLabel.text = Manager.shared.updateRemain(event)
         
     }
     override func viewWillDisappear(_ animated: Bool) {
