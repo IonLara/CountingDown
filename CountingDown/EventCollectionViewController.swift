@@ -218,11 +218,13 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             //Update data
             if delete {
                 //Delete
-                if let calEvent = store.event(withIdentifier: event.calendarID!) {
-                    do {
-                        try store.remove(calEvent, span: .thisEvent)
-                    } catch {
-                        print("Could not desync.")
+                if let id = event.calendarID {
+                    if let calEvent = store.event(withIdentifier: id) {
+                        do {
+                            try store.remove(calEvent, span: .thisEvent)
+                        } catch {
+                            print("Could not desync.")
+                        }
                     }
                 }
             } else {
@@ -449,7 +451,6 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
             cell.shareButton.tag = indexPath.item + 2000
             cell.shareButton.addTarget(self, action: #selector(shareEvent), for: .touchUpInside)
             cell.shareButton.isHidden = event.isSynced
-            cell.syncedButton.isHidden = !event.isSynced
             
             if event.hasEmoji {
                 cell.emoji.text = event.emoji
