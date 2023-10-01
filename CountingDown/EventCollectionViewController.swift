@@ -134,11 +134,11 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         let isFav = sender.tag / 1000 == 2
         if isFav { //Index was taken from favorites section
             let index = events.firstIndex(of: favorites[sender.tag - 2000])
+            Manager.shared.cancelNotifications("\(events[index!].id)")
             favorites.remove(at: sender.tag - 2000)
             let event = events[index!]
             updateCalendar(event, true)
             events.remove(at: index!)
-            Manager.shared.cancelNotifications("\(events[index!].id)")
             collectionView.reloadData()
         } else { //Index was taken from regular events section
             if events[sender.tag - 1000].isFavorite {
