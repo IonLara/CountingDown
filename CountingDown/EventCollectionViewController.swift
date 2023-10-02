@@ -48,6 +48,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
         } else {
             events = Manager.loadBaseEvents()
         }
+        Manager.loadUser()
         eventsByTitle = events.sorted(by: {$0.title < $1.title})
         eventsByTime = events.sorted(by: {$0.date < $1.date})
         favorites = getFavorites()

@@ -10,12 +10,38 @@ import UserNotifications
 
 struct Manager: Codable {
     
-    static let shared = Manager()
+    static let shared = Manager.init()
+    static var user: User?
     
     var messages = ["Almost there! ", "Can't wait! ", "So exciting! ", "Getting closer! ", "Less time than yesterday! ", "Don't forget! ", "Just ", "Only ", ""]
     
     static let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     static let archiveURL = documentsDirectory.appendingPathComponent("events").appendingPathExtension("plist")
+    static let groupsUrl = documentsDirectory.appendingPathComponent("groups").appendingPathExtension("list")
+    static let userUrl = documentsDirectory.appendingPathComponent("user").appendingPathExtension("info")
+    
+    static func loadUser(){
+        guard let codedUser = try? Data(contentsOf: userUrl) else {
+            user = User()
+            saveUser()
+            return
+        }
+        let decoder = PropertyListDecoder()
+        if let info = try? decoder.decode(User.self, from: codedUser) {
+            user = info
+            print("Loaded User: \(Manager.user!.username)")
+        } else {
+            user = User()
+            saveUser()
+            print("Saved User")
+        }
+    }
+    
+    static func saveUser() {
+        let encoder = PropertyListEncoder()
+        let coded = try? encoder.encode(user)
+        try? coded?.write(to: userUrl)
+    }
     
     static func loadEvents() -> [Event]? {
         guard let codedEvents = try? Data(contentsOf: archiveURL) else {return nil}
@@ -27,6 +53,18 @@ struct Manager: Codable {
         let encoder = PropertyListEncoder()
         let coded = try? encoder.encode(events)
         try? coded?.write(to: archiveURL)
+    }
+    
+    static func loadGroups() -> [Group]? {
+        guard let codedGroups = try? Data(contentsOf: groupsUrl) else {return nil}
+        let decoder = PropertyListDecoder()
+        return try? decoder.decode(Array<Group>.self, from: codedGroups)
+    }
+    
+    static func saveGroups(_ groups: [Group]) {
+        let encoder = PropertyListEncoder()
+        let coded = try? encoder.encode(groups)
+        try? coded?.write(to: groupsUrl)
     }
     
     static func loadBaseEvents() -> [Event] {
