@@ -23,11 +23,21 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
             groups = loaded
         } else {
             var temp = Group()
+            temp.groupName = "Example Group"
+            temp.events = [Manager.loadEvents()![0]]
             groups = [temp]
         }
         
         collectionView.collectionViewLayout = createLayout()
         //        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    @IBSegueAction func showGroupDetail(_ coder: NSCoder, sender: Any?) -> GroupViewController? {
+        var detailView = GroupViewController(coder: coder)
+        guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else{return detailView}
+        let index = indexPath.item
+        
+        detailView?.group = groups[index]
+        return detailView
     }
     
     func createLayout() ->UICollectionViewCompositionalLayout {

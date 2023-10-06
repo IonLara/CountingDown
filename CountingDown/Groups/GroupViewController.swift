@@ -1,0 +1,208 @@
+//
+//  GroupViewController.swift
+//  CountingDown
+//
+//  Created by Ion Sebastian Rodriguez Lara on 03/10/23.
+//
+
+import UIKit
+
+class GroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIColorPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    @IBOutlet weak var groupImage: UIImageView!
+    @IBOutlet weak var colorWell: UIColorWell!
+    @IBOutlet weak var eventsButton: UIButton!
+    @IBOutlet weak var membersButton: UIButton!
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    var group: Group!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = editButtonItem
+        
+        title = group.groupName
+        
+        groupImage.layer.cornerRadius = 20.0
+        groupImage.clipsToBounds = true
+        if group.hasImage {
+            if let temp = Data(base64Encoded: group.imageData!) {
+                let image = UIImage(data: temp)
+                groupImage.image = UIImage(cgImage: (image?.cgImage!)!, scale: image!.scale, orientation: UIImage.Orientation(rawValue: group.imageOrientation!)!)
+            }
+        } else {
+            groupImage.backgroundColor = UIColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
+        }
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.collectionViewLayout = createLayout()
+    }
+    
+    func getTime(_ time: Double) -> (TimeMeassure, Int) {
+        var meassure = TimeMeassure.days
+        var temp = 0
+        if time > 86_400 {
+            temp = Int(ceil(time / 86_400))
+        } else if time > 3_600 {
+            meassure = .hours
+            temp = Int(ceil(time / 3_600))
+        } else if time > 60 {
+            meassure = .minutes
+            temp = Int(ceil(time / 60))
+        } else {
+            meassure = .seconds
+            temp = Int(round(time))
+        }
+        return (meassure, temp)
+    }
+    
+    func createLayout() ->UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.45), heightDimension: .fractionalWidth(0.48))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 12)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20)
+        
+        return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfSections section: Int) -> Int {
+        
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        group.events.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
+        
+        var event = group.events[indexPath.item]
+        
+        cell.nameLabel.text = event.title
+        let temp = getTime(event.date.timeIntervalSinceNow)
+        cell.numberLabel.text = "\(temp.1)"
+        cell.remainderLabel.text = "\(temp.0.rawValue) Left"
+        
+        if !event.hasImage {
+            cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+            cell.image.image = nil
+            cell.image.layer.borderWidth = 0
+        } else {
+            if event.isImageIncluded {
+                cell.image.image = UIImage(named: event.imageLocation)
+            } else {
+                if let temp = Data(base64Encoded: event.imageData!) {
+                    let image = UIImage(data: temp)
+                    cell.image.image = UIImage(cgImage: (image?.cgImage)!, scale: image!.scale, orientation: UIImage.Orientation(rawValue: event.imageOrientation!)!)
+                }
+            }
+            cell.image.layer.borderWidth = 5
+            cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+        }
+        cell.opacityView.layer.borderWidth = 5
+        cell.opacityView.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+        cell.image.layer.cornerRadius = 20
+        cell.image.clipsToBounds = true
+        cell.opacityView.layer.cornerRadius = 20
+        cell.opacityView.clipsToBounds = true
+        
+        //        cell.deleteButton.tag = indexPath.item + 1000
+        //        cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+        
+        
+        //        cell.favoriteButton.tag = indexPath.item + 1000
+        //        cell.favoriteButton.addTarget(self, action: #selector(favoriteEvent), for: .touchUpInside)
+        //        cell.favoriteButton.isSelected = event.isFavorite
+        //
+        //        cell.shareButton.tag = indexPath.item + 1000
+        //        cell.shareButton.addTarget(self, action: #selector(shareEvent), for: .touchUpInside)
+        if event.isSynced {
+            cell.shareButton.setImage(UIImage(systemName: "checkmark.icloud.fill"), for: .normal)
+            cell.shareButton.isEnabled = false
+        } else {
+            cell.shareButton.setImage(UIImage(systemName: "calendar.badge.plus"), for: .normal)
+            cell.shareButton.isEnabled = true
+        }
+        
+        
+        if event.hasEmoji {
+            cell.emoji.text = event.emoji
+        } else {
+            cell.emoji.text = ""
+        }
+        
+        cell.isEditing = isEditing
+        return cell
+    }
+    
+    //    func eventCollectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    //
+    //        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
+    //
+    //        var event = group.events[indexPath.item]
+    //
+    //        cell.nameLabel.text = event.title
+    //        let temp = getTime(event.date.timeIntervalSinceNow)
+    //        cell.numberLabel.text = "\(temp.1)"
+    //        cell.remainderLabel.text = "\(temp.0.rawValue) Left"
+    //
+    //        if !event.hasImage {
+    //            cell.image.backgroundColor = UIColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+    //            cell.image.image = nil
+    //            cell.image.layer.borderWidth = 0
+    //        } else {
+    //            if event.isImageIncluded {
+    //                cell.image.image = UIImage(named: event.imageLocation)
+    //            } else {
+    //                if let temp = Data(base64Encoded: event.imageData!) {
+    //                    let image = UIImage(data: temp)
+    //                    cell.image.image = UIImage(cgImage: (image?.cgImage)!, scale: image!.scale, orientation: UIImage.Orientation(rawValue: event.imageOrientation!)!)
+    //                }
+    //            }
+    //            cell.image.layer.borderWidth = 5
+    //            cell.image.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+    //        }
+    //        cell.opacityView.layer.borderWidth = 5
+    //        cell.opacityView.layer.borderColor = CGColor(red: event.colorR, green: event.colorG, blue: event.colorB, alpha: event.colorA)
+    //        cell.image.layer.cornerRadius = 20
+    //        cell.image.clipsToBounds = true
+    //        cell.opacityView.layer.cornerRadius = 20
+    //        cell.opacityView.clipsToBounds = true
+    //
+    ////        cell.deleteButton.tag = indexPath.item + 1000
+    ////        cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+    //
+    //
+    ////        cell.favoriteButton.tag = indexPath.item + 1000
+    ////        cell.favoriteButton.addTarget(self, action: #selector(favoriteEvent), for: .touchUpInside)
+    ////        cell.favoriteButton.isSelected = event.isFavorite
+    ////
+    ////        cell.shareButton.tag = indexPath.item + 1000
+    ////        cell.shareButton.addTarget(self, action: #selector(shareEvent), for: .touchUpInside)
+    //        if event.isSynced {
+    //            cell.shareButton.setImage(UIImage(systemName: "checkmark.icloud.fill"), for: .normal)
+    //            cell.shareButton.isEnabled = false
+    //        } else {
+    //            cell.shareButton.setImage(UIImage(systemName: "calendar.badge.plus"), for: .normal)
+    //            cell.shareButton.isEnabled = true
+    //        }
+    //
+    //
+    //        if event.hasEmoji {
+    //            cell.emoji.text = event.emoji
+    //        } else {
+    //            cell.emoji.text = ""
+    //        }
+    //
+    //        cell.isEditing = isEditing
+    //        return cell
+    //    }
+    
+}

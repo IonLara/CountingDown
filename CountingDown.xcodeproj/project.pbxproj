@@ -10,6 +10,7 @@
 		6215BC752ACA3E2100E77ACA /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6215BC742ACA3E2100E77ACA /* Group.swift */; };
 		6215BC792ACA416300E77ACA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6215BC782ACA416300E77ACA /* User.swift */; };
 		6215BC7B2ACA558200E77ACA /* GroupCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6215BC7A2ACA558200E77ACA /* GroupCollectionViewController.swift */; };
+		6215BC7D2AD09A6000E77ACA /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6215BC7C2AD09A6000E77ACA /* GroupViewController.swift */; };
 		626563772A2E9EEE00D45247 /* EventCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563762A2E9EED00D45247 /* EventCollectionViewController.swift */; };
 		626563792A2EA19C00D45247 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 626563782A2EA19C00D45247 /* Manager.swift */; };
 		6265637B2A2EA45900D45247 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6265637A2A2EA45900D45247 /* Event.swift */; };
@@ -40,6 +41,7 @@
 		6215BC742ACA3E2100E77ACA /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		6215BC782ACA416300E77ACA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6215BC7A2ACA558200E77ACA /* GroupCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCollectionViewController.swift; sourceTree = "<group>"; };
+		6215BC7C2AD09A6000E77ACA /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		626563762A2E9EED00D45247 /* EventCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionViewController.swift; sourceTree = "<group>"; };
 		626563782A2EA19C00D45247 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		6265637A2A2EA45900D45247 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -79,6 +81,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6215BC7E2AD09A7400E77ACA /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				6215BC742ACA3E2100E77ACA /* Group.swift */,
+				6215BC7C2AD09A6000E77ACA /* GroupViewController.swift */,
+				6215BC7A2ACA558200E77ACA /* GroupCollectionViewController.swift */,
+			);
+			path = Groups;
+			sourceTree = "<group>";
+		};
 		626563922A392B6100D45247 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,12 +129,11 @@
 				62C0552B2A2E8F980071331F /* ViewController.swift */,
 				626563782A2EA19C00D45247 /* Manager.swift */,
 				6265637A2A2EA45900D45247 /* Event.swift */,
-				6215BC742ACA3E2100E77ACA /* Group.swift */,
 				6215BC782ACA416300E77ACA /* User.swift */,
 				6265637C2A2EA4A100D45247 /* Task.swift */,
 				626563762A2E9EED00D45247 /* EventCollectionViewController.swift */,
-				6215BC7A2ACA558200E77ACA /* GroupCollectionViewController.swift */,
 				626563822A3008B300D45247 /* EventDetailViewController.swift */,
+				6215BC7E2AD09A7400E77ACA /* Groups */,
 				626563882A34483E00D45247 /* NotificationTableViewController.swift */,
 				626563952A3977EE00D45247 /* AlarmTableViewController.swift */,
 				626563972A3C11AF00D45247 /* HeaderCollectionReusableView.swift */,
@@ -213,6 +224,7 @@
 				62C0552C2A2E8F980071331F /* ViewController.swift in Sources */,
 				62ED0D302A4271530011BB92 /* Character+IsEmoji.swift in Sources */,
 				6265637F2A2EB82200D45247 /* EventCollectionViewCell.swift in Sources */,
+				6215BC7D2AD09A6000E77ACA /* GroupViewController.swift in Sources */,
 				626563872A341ACB00D45247 /* TaskTableViewCell.swift in Sources */,
 				6265638B2A38284800D45247 /* DateTableViewCell.swift in Sources */,
 				6215BC7B2ACA558200E77ACA /* GroupCollectionViewController.swift in Sources */,
