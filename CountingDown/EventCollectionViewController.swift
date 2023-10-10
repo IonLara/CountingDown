@@ -552,6 +552,16 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        CGSize(width: 10, height: 10)
 //    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let temp = Manager.loadEvents(){
+            events = temp
+        } else {
+            events = Manager.loadBaseEvents()
+        }
+        collectionView.reloadData()
+    }
 }
 
 enum TimeMeassure: String {

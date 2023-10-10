@@ -24,7 +24,7 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         } else {
             var temp = Group()
             temp.groupName = "Example Group"
-            temp.events = [Manager.loadEvents()![0]]
+            temp.events = [0]
             groups = [temp]
         }
         

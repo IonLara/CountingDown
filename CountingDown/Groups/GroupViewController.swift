@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import EventKit
 
-class GroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIColorPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class GroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIColorPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EventDelegate {
+    
+    let store = EKEventStore()
     
     @IBOutlet weak var groupImage: UIImageView!
     @IBOutlet weak var colorWell: UIColorWell!
@@ -16,6 +19,9 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet weak var collectionView: UICollectionView!
     
     var group: Group!
+    
+    var events: [Event]!
+    var eventIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +43,10 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.collectionViewLayout = createLayout()
+        store.requestAccess(to: .event, completion: { granted, error in
+            // Handle the response to the request.
+        })
+        events = Manager.loadEvents()
     }
     
     func getTime(_ time: Double) -> (TimeMeassure, Int) {
@@ -83,7 +93,7 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
         
-        var event = group.events[indexPath.item]
+        var event = events[group.events[indexPath.item]]
         
         cell.nameLabel.text = event.title
         let temp = getTime(event.date.timeIntervalSinceNow)
@@ -141,6 +151,96 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         cell.isEditing = isEditing
         return cell
     }
+    @IBSegueAction func showEventDetail(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
+        let detailView = EventDetailViewController(coder: coder)
+        guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else {return detailView}
+        let index = indexPath.item
+        
+        let event = events[group.events[index]]
+        
+        detailView?.event = event
+        detailView?.delegate = self
+        detailView?.index = group.events[index]
+        return detailView
+    }
+    
+    func toggleFavorite(_ index: Int, _ adding: Bool) {
+        events[index].isFavorite.toggle()
+//        events[events.firstIndex(of: group.events[index])!].isFavorite.toggle()
+        collectionView.reloadData()
+    }
+    
+    func updateName(_ index: Int) {
+        
+        collectionView.reloadData()
+    }
+    
+    func saveEvents() {
+        print("HO")
+        Manager.saveEvents(events)
+    }
+    
+    func updateCalendar(_ event: Event, _ delete: Bool) {
+        if event.isSynced {
+            //Update data
+            if delete {
+                //Delete
+                if let id = event.calendarID {
+                    if let calEvent = store.event(withIdentifier: id) {
+                        do {
+                            try store.remove(calEvent, span: .thisEvent)
+                        } catch {
+                            print("Could not desync.")
+                        }
+                    }
+                }
+            } else {
+                print(event.calendarID)
+                if let calEvent = store.event(withIdentifier: event.calendarID!) {
+                    calEvent.title = event.title
+                    calEvent.isAllDay = event.isAllDay
+                    calEvent.startDate = event.date
+                    calEvent.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: event.date)
+                    calEvent.notes = event.notes
+                    
+                    do {
+                        try store.save(calEvent, span: .thisEvent)
+                    } catch {
+                        print("Could not sync to calendar.")
+                    }
+                }
+            }
+        }
+    }
+    
+    func syncEvent(_ event: Event) -> Bool {
+        if !event.isSynced {
+            print("Event created")
+            let calEvent = EKEvent(eventStore: store)
+            
+
+            calEvent.title = event.title
+            calEvent.isAllDay = event.isAllDay
+            calEvent.startDate = event.date
+            calEvent.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: event.date)
+            calEvent.notes = event.notes
+            calEvent.calendar = store.defaultCalendarForNewEvents
+            do {
+                try store.save(calEvent, span: .thisEvent)
+                saveEvents()
+                event.isSynced = true
+                event.calendarID = calEvent.eventIdentifier
+                collectionView.reloadData()
+                print(event.isSynced)
+                return true
+            } catch {
+                print("Could not sync to calendar.")
+                return false
+            }
+        }
+        return true
+    }
+    
     
     //    func eventCollectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     //

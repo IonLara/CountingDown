@@ -17,7 +17,7 @@ class Group: Codable, Equatable {
     var members: [User]
     var admins: [User]
     
-    var events: [Event]
+    var events: [Int]
     
     var hasImage: Bool = false
     var imageData: String?
@@ -37,7 +37,7 @@ class Group: Codable, Equatable {
         self.description = nil
         self.members = [Manager.user!]
         self.admins = [Manager.user!]
-        self.events = [Event]()
+        self.events = [Int]()
         self.hasImage = false
         self.imageData = nil
         self.imageOrientation = nil
