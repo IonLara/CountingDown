@@ -31,6 +31,7 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         collectionView.collectionViewLayout = createLayout()
         //        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
     }
+    
     @IBSegueAction func showGroupDetail(_ coder: NSCoder, sender: Any?) -> GroupViewController? {
         var detailView = GroupViewController(coder: coder)
         guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else{return detailView}

@@ -49,6 +49,17 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         events = Manager.loadEvents()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let temp = Manager.loadEvents(){
+            events = temp
+        } else {
+            events = Manager.loadBaseEvents()
+        }
+        collectionView.reloadData()
+    }
+    
     func getTime(_ time: Double) -> (TimeMeassure, Int) {
         var meassure = TimeMeassure.days
         var temp = 0
