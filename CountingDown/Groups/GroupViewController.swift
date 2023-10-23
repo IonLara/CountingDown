@@ -35,9 +35,13 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.rightBarButtonItem = editButtonItem
+//        navigationItem.rightBarButtonItem = editButtonItem
         
         title = group.groupName
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
         
         groupNameField.text = group.groupName
         
@@ -75,6 +79,9 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         collectionView.reloadData()
     }
     
+    @IBAction func nameEditAccept(_ sender: UITextField) {
+        view.endEditing(true)
+    }
     @IBAction func nameEditChanged(_ sender: UITextField) {
         title = sender.text
     }
@@ -89,6 +96,10 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
         delegate.updateGroup(groupIndex)
         delegate.saveGroups()
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     @objc func colorChanged() {

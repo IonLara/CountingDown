@@ -846,6 +846,7 @@
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
                                         <connections>
                                             <action selector="endedEditingName:" destination="HHM-DK-cqs" eventType="primaryActionTriggered" id="RRB-FS-Zpk"/>
+                                            <action selector="nameEditAccept:" destination="mPU-GX-0MY" eventType="primaryActionTriggered" id="4Ch-6I-nFm"/>
                                             <action selector="nameEditChanged:" destination="mPU-GX-0MY" eventType="editingChanged" id="XNO-KL-j4p"/>
                                             <action selector="nameEditEnded:" destination="mPU-GX-0MY" eventType="editingDidEnd" id="MvW-b4-kLI"/>
                                         </connections>
