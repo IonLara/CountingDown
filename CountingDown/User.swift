@@ -7,7 +7,11 @@
 
 import Foundation
 
-class User: Codable {
+class User: Codable, Equatable {
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     let id: UUID
     var username: String
     

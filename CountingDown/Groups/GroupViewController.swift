@@ -224,6 +224,11 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         cell.isEditing = isEditing
         return cell
     }
+    @IBSegueAction func showMembers(_ coder: NSCoder, sender: Any?) -> MembersTableViewController? {
+        let memberView = MembersTableViewController(coder: coder)
+        memberView?.group = group
+        return memberView
+    }
     @IBSegueAction func showEventDetail(_ coder: NSCoder, sender: Any?) -> EventDetailViewController? {
         let detailView = EventDetailViewController(coder: coder)
         guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else {return detailView}

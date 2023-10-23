@@ -33,6 +33,8 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
             var temp = Group()
             temp.groupName = "Example Group"
             temp.events = [0]
+            temp.members = [Manager.user!]
+            temp.admins = [Manager.user!]
             groups = [temp]
         }
         
