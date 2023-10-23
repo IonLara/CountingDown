@@ -9,7 +9,15 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class GroupCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class GroupCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, GroupDelegate {
+    func updateGroup(_ index: Int) {
+        collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+    }
+    
+    func saveGroups() {
+        Manager.saveGroups(groups)
+    }
+    
     
     var groups = [Group]()
     
@@ -29,7 +37,6 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         }
         
         collectionView.collectionViewLayout = createLayout()
-        //        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
     }
     
     @IBSegueAction func showGroupDetail(_ coder: NSCoder, sender: Any?) -> GroupViewController? {
@@ -38,6 +45,8 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         let index = indexPath.item
         
         detailView?.group = groups[index]
+        detailView?.delegate = self
+        detailView?.groupIndex = index
         return detailView
     }
     
@@ -48,12 +57,12 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(0.5))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
         
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+//        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(80))
+//        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20)
-        section.boundarySupplementaryItems = [header]
+//        section.boundarySupplementaryItems = [header]
         
         return UICollectionViewCompositionalLayout(section: section)
     }

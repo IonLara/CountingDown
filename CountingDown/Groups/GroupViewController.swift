@@ -8,6 +8,11 @@
 import UIKit
 import EventKit
 
+protocol GroupDelegate {
+    func updateGroup(_ index: Int)
+    func saveGroups()
+}
+
 class GroupViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UIColorPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EventDelegate {
     
     let store = EKEventStore()
@@ -17,8 +22,12 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet weak var eventsButton: UIButton!
     @IBOutlet weak var membersButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var groupNameField: UITextField!
+    
+    var delegate: GroupDelegate!
     
     var group: Group!
+    var groupIndex: Int!
     
     var events: [Event]!
     var eventIndex = 0
@@ -30,8 +39,15 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         
         title = group.groupName
         
+        groupNameField.text = group.groupName
+        
         groupImage.layer.cornerRadius = 20.0
         groupImage.clipsToBounds = true
+        
+        colorWell.selectedColor = UIColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
+        colorWell.supportsAlpha = false
+        colorWell.addTarget(self, action: #selector(colorChanged), for: .valueChanged)
+        
         if group.hasImage {
             if let temp = Data(base64Encoded: group.imageData!) {
                 let image = UIImage(data: temp)
@@ -44,7 +60,6 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         collectionView.delegate = self
         collectionView.collectionViewLayout = createLayout()
         store.requestAccess(to: .event, completion: { granted, error in
-            // Handle the response to the request.
         })
         events = Manager.loadEvents()
     }
@@ -58,6 +73,42 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
             events = Manager.loadBaseEvents()
         }
         collectionView.reloadData()
+    }
+    
+    @IBAction func nameEditChanged(_ sender: UITextField) {
+        title = sender.text
+    }
+    @IBAction func nameEditEnded(_ sender: UITextField) {
+        sender.resignFirstResponder()
+        if sender.text == nil || sender.text == "" {
+            sender.text = group.groupName
+            title = group.groupName
+        } else {
+            group.groupName = sender.text!
+            title = sender.text!
+        }
+        delegate.updateGroup(groupIndex)
+        delegate.saveGroups()
+    }
+    
+    @objc func colorChanged() {
+        let color = colorWell.selectedColor
+        groupImage.backgroundColor = color
+        groupImage.layer.borderColor = color?.cgColor
+        
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue:CGFloat = 0
+        var alpha:CGFloat = 0
+        color?.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        group.colorR = red
+        group.colorG = green
+        group.colorB = blue
+        group.colorA = 1
+        
+        delegate.updateGroup(groupIndex)
+        delegate.saveGroups()
     }
     
     func getTime(_ time: Double) -> (TimeMeassure, Int) {
