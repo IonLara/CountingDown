@@ -36,9 +36,6 @@ class MembersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Title", for: indexPath)
-            var content = cell.defaultContentConfiguration()
-            content.text = "Members:"
-            cell.contentConfiguration = content
             return cell
         }
         if indexPath.row <= group.members.count {

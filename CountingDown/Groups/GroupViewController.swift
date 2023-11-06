@@ -54,6 +54,9 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         groupImage.addGestureRecognizer(gestureRecognizer)
         
+        groupImage.layer.borderWidth = 5
+        groupImage.layer.borderColor = CGColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
+        
         colorWell.selectedColor = UIColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
         colorWell.supportsAlpha = false
         colorWell.addTarget(self, action: #selector(colorChanged), for: .valueChanged)
@@ -125,6 +128,28 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         present(alertController, animated: true)
     }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.originalImage] as? UIImage else {
+            fatalError()
+        }
+        
+        groupImage.image = image
+        group.hasImage = true
+        group.imageOrientation = image.imageOrientation.rawValue
+        if let result = image.pngData()?.base64EncodedString() {
+            group.imageData = result
+        }
+        
+        if group.hasEmoji {
+            group.hasEmoji = false
+            group.emoji = ""
+            emojiTextField.text = ""
+        }
+        delegate.updateGroup(groupIndex)
+        delegate.saveGroups()
+        self.dismiss(animated: true)
+    }
+    
     @objc func emojiDone() {
         if let temp = emojiTextField.text?.first?.isEmoji {
             if temp == true {
@@ -146,6 +171,11 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     @objc func emojiCanceled() {
         if !((emojiTextField.text?.first?.isEmoji) != nil) {
+            if group.hasEmoji {
+                group.hasEmoji = false
+                group.emoji = ""
+                emojiTextField.isUserInteractionEnabled = false
+            }
             if group.hasImage {
                 if let temp = Data(base64Encoded: group.imageData!) {
                     let image = UIImage(data: temp)

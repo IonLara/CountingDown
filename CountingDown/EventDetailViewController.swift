@@ -228,6 +228,11 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     }
     @objc func emojiCanceled() {
         if !((emojiTextField.text?.first?.isEmoji) != nil) {
+            if event.hasEmoji {
+                event.hasEmoji = false
+                event.emoji = ""
+                emojiTextField.isUserInteractionEnabled = false
+            }
             if event.hasImage {
                 if event.isImageIncluded {
                     eventImage.image = UIImage(named: event.imageLocation)
