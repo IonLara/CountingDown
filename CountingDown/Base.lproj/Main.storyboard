@@ -1046,7 +1046,7 @@
                         <outlet property="eventsButton" destination="JBP-Qg-FYg" id="mem-es-tIX"/>
                         <outlet property="groupImage" destination="fRh-AY-1KM" id="Bc0-kg-lpE"/>
                         <outlet property="groupNameField" destination="KT8-8k-ANQ" id="QWr-tt-SnQ"/>
-                        <outlet property="membersButton" destination="uBB-PC-uZP" id="UpL-Ve-XA3"/>
+                        <outlet property="membersButton" destination="uBB-PC-uZP" id="h3Z-Lj-5iA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z5T-L2-KIo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1380,7 +1380,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="36.333332061767578"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ek-On-IM5">
+                                        <button opaque="NO" tag="100" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ek-On-IM5">
                                             <rect key="frame" x="9.6666666666666572" y="1" width="373.66666666666674" height="34.333333333333336"/>
                                             <state key="normal" title="Button"/>
                                             <buttonConfiguration key="configuration" style="filled" title="Add New Member"/>

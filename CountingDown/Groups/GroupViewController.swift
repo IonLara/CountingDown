@@ -42,6 +42,10 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         
         title = group.groupName
         
+        membersButton.titleLabel?.text = "Members [ \(group.members.count) ]"
+        membersButton.setTitle("Members [ \(group.members.count) ]", for: .selected)
+        membersButton.setTitle("Members [ \(group.members.count) ]", for: .normal)
+        
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)

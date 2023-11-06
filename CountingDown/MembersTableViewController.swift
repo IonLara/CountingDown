@@ -10,6 +10,7 @@ import UIKit
 class MembersTableViewController: UITableViewController {
     
     var group: Group!
+    var addButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,36 @@ class MembersTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    @objc func addedMember() {
+        print("Added Member")
+    }
+    
+    @objc func dismissAlert() {
+        if presentedViewController is UIAlertController {
+            self.dismiss(animated: true)
+        }
+    }
+    
+    @objc func addAdmin() {
+        print("Adding as admin!")
+    }
+    
+    @objc func removeAdmin() {
+        if group.admins.count == 1 {
+            print("Can't remove! There must be at least 1 admin.")
+        } else {
+            
+        }
+    }
+    
+    @objc func removeMember() {
+        if group.members.count == 1 {
+            print("Can't remove, there must be at least 1 member.")
+        } else {
+            
+        }
     }
 
     // MARK: - Table view data source
@@ -36,6 +67,7 @@ class MembersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Title", for: indexPath)
+            cell.isUserInteractionEnabled = false
             return cell
         }
         if indexPath.row <= group.members.count {
@@ -52,7 +84,38 @@ class MembersTableViewController: UITableViewController {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Add", for: indexPath)
+            addButton = cell.viewWithTag(100) as? UIButton
+            addButton.addTarget(self, action: #selector(addedMember), for: .primaryActionTriggered)
             return cell
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row <= group.members.count {
+            if group.admins.contains(Manager.user!) {
+                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                if group.admins.contains(group.members[indexPath.row - 1]) {
+                    //Delete as Admin
+                    alertController.addAction(UIAlertAction(title: "Remove as Admin", style: .default, handler: {_ in
+                        self.removeAdmin()
+                    }))
+                } else {
+                    //Add as Admin
+                    alertController.addAction(UIAlertAction(title: "Set as Admin", style: .default, handler: {_ in
+                        self.addAdmin()
+                    }))
+                }
+                
+                alertController.addAction(UIAlertAction(title: "Remove from Group", style: .destructive, handler: {_ in
+                    self.removeMember()
+                }))
+                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {_ in
+                    self.dismissAlert()
+                }))
+                present(alertController, animated: true)
+                
+            }
         }
     }
 
