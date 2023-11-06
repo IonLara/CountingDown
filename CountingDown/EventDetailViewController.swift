@@ -176,6 +176,7 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
         delegate.updateName(index)
         delegate.saveEvents()
         delegate.updateCalendar(event, false)
+        title = event.title
     }
     
     @objc func dismissKeyboard() {
@@ -291,6 +292,8 @@ class EventDetailViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = event.title
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false

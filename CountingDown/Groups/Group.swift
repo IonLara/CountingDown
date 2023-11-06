@@ -22,6 +22,7 @@ class Group: Codable, Equatable {
     var hasImage: Bool = false
     var imageData: String?
     var imageOrientation: Int?
+    var imageLocation = ""
     
     var hasEmoji: Bool = false
     var emoji: String

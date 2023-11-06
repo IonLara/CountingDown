@@ -23,6 +23,9 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet weak var membersButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var groupNameField: UITextField!
+    @IBOutlet weak var emojiTextField: EmojiTextField!
+    
+    var imagePicker = UIImagePickerController()
     
     var delegate: GroupDelegate!
     
@@ -47,10 +50,17 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         
         groupImage.layer.cornerRadius = 20.0
         groupImage.clipsToBounds = true
+        groupImage.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        groupImage.addGestureRecognizer(gestureRecognizer)
         
         colorWell.selectedColor = UIColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
         colorWell.supportsAlpha = false
         colorWell.addTarget(self, action: #selector(colorChanged), for: .valueChanged)
+        
+        emojiTextField.isUserInteractionEnabled = false
+        emojiTextField.addTarget(self, action: #selector(emojiDone), for: .editingChanged)
+        emojiTextField.addTarget(self, action: #selector(emojiCanceled), for: .editingDidEnd)
         
         if group.hasImage {
             if let temp = Data(base64Encoded: group.imageData!) {
@@ -59,6 +69,9 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
             }
         } else {
             groupImage.backgroundColor = UIColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
+            if group.hasEmoji {
+                emojiTextField.text = group.emoji
+            }
         }
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -96,6 +109,75 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         }
         delegate.updateGroup(groupIndex)
         delegate.saveGroups()
+    }
+    
+    @objc func imageTapped() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Choose Image", style: .default, handler: {_ in
+            self.chooseImage()
+        }))
+        alertController.addAction(UIAlertAction(title: "Choose Emoji", style: .default, handler: {_ in
+            self.useEmoji()
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {_ in
+            self.dismissAlert()
+        }))
+        present(alertController, animated: true)
+    }
+    
+    @objc func emojiDone() {
+        if let temp = emojiTextField.text?.first?.isEmoji {
+            if temp == true {
+                dismissKeyboard()
+                group.hasEmoji = true
+                group.emoji = emojiTextField.text!
+                group.hasImage = false
+                group.imageLocation = ""
+                emojiTextField.isUserInteractionEnabled = false
+                delegate.updateGroup(groupIndex)
+            }else {
+                emojiTextField.text = ""
+            }
+        } else {
+            emojiTextField.text = ""
+        }
+        delegate.saveGroups()
+    }
+    
+    @objc func emojiCanceled() {
+        if !((emojiTextField.text?.first?.isEmoji) != nil) {
+            if group.hasImage {
+                if let temp = Data(base64Encoded: group.imageData!) {
+                    let image = UIImage(data: temp)
+                    groupImage.image = UIImage(cgImage: (image?.cgImage!)!, scale: image!.scale, orientation: UIImage.Orientation(rawValue: group.imageOrientation!)!)
+                }
+            } else {
+                groupImage.backgroundColor = UIColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
+            }
+        }
+        delegate.saveGroups()
+    }
+    
+    func useEmoji() {
+        groupImage.image = nil
+        groupImage.backgroundColor = UIColor(red: group.colorR, green: group.colorG, blue: group.colorB, alpha: group.colorA)
+        emojiTextField.isUserInteractionEnabled = true
+        emojiTextField.becomeFirstResponder()
+        emojiTextField.text = ""
+    }
+    
+    func chooseImage() {
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
+            imagePicker.delegate = self
+            imagePicker.sourceType = .savedPhotosAlbum
+            imagePicker.allowsEditing = false
+            
+            present(imagePicker, animated: true)
+        }
+    }
+    
+    @objc func dismissAlert() {
+        self.dismiss(animated: true)
     }
     
     @objc func dismissKeyboard() {
@@ -254,7 +336,6 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func saveEvents() {
-        print("HO")
         Manager.saveEvents(events)
     }
     

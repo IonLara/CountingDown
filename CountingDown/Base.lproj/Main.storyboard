@@ -1042,6 +1042,7 @@
                     <connections>
                         <outlet property="collectionView" destination="IwX-4q-0Bi" id="e0R-qa-ic1"/>
                         <outlet property="colorWell" destination="3Oh-w8-7L5" id="SUE-uY-vsJ"/>
+                        <outlet property="emojiTextField" destination="2EZ-Sv-ir1" id="ieX-lp-9qY"/>
                         <outlet property="eventsButton" destination="JBP-Qg-FYg" id="mem-es-tIX"/>
                         <outlet property="groupImage" destination="fRh-AY-1KM" id="Bc0-kg-lpE"/>
                         <outlet property="groupNameField" destination="KT8-8k-ANQ" id="QWr-tt-SnQ"/>
