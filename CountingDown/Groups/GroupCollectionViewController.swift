@@ -55,6 +55,33 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         collectionView.collectionViewLayout = createLayout()
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
+            let cell = collectionView.cellForItem(at: indexPath) as! EventCollectionViewCell
+            cell.isEditing = isEditing
+        }
+    }
+    
+    @IBSegueAction func CreateNewGroup(_ coder: NSCoder) -> GroupViewController? {
+        let view = GroupViewController(coder: coder)
+        let index = groups.count
+        
+        let group = Group()
+        
+        groups.append(group)
+        
+        view?.group = group
+        view?.delegate = self
+        view?.groupIndex = index
+        
+        saveGroups()
+        
+        collectionView.reloadData()
+        
+        return view
+    }
+    
     @IBSegueAction func showGroupDetail(_ coder: NSCoder, sender: Any?) -> GroupViewController? {
         var detailView = GroupViewController(coder: coder)
         guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else{return detailView}
@@ -81,6 +108,13 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
 //        section.boundarySupplementaryItems = [header]
         
         return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    @objc func deleteGroup(sender: UICollectionViewCell) {
+        let index = sender.tag - 1000
+        groups.remove(at: index)
+        
+        saveGroups()
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -114,7 +148,7 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         cell.opacityView.clipsToBounds = true
         
         cell.deleteButton.tag = indexPath.item + 1000
-//        cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+        cell.deleteButton.addTarget(self, action: #selector(deleteGroup), for: .touchUpInside)
         
         
         cell.favoriteButton.tag = indexPath.item + 1000
