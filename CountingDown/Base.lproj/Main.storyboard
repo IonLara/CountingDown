@@ -858,6 +858,9 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="175.66666666666666" height="34.333333333333336"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Edit Events"/>
+                                                <connections>
+                                                    <action selector="EditToggle:" destination="mPU-GX-0MY" eventType="touchUpInside" id="3LW-DW-wC3"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uBB-PC-uZP">
                                                 <rect key="frame" x="185.66666666666663" y="0.0" width="175.33333333333337" height="34.333333333333336"/>
@@ -919,10 +922,26 @@
                                                         </label>
                                                         <view hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gYN-oF-1QB">
                                                             <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
+                                                            <subviews>
+                                                                <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I4L-6j-kY6" userLabel="ShareButton">
+                                                                    <rect key="frame" x="191" y="131" width="30" height="34"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                    <state key="normal">
+                                                                        <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    </state>
+                                                                    <state key="selected" image="star.fill" catalog="system">
+                                                                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
+                                                                    </state>
+                                                                    <connections>
+                                                                        <action selector="favoriteTapped:" destination="HHM-DK-cqs" eventType="touchUpInside" id="8gt-JG-xp7"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         </view>
                                                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QHB-kv-xug" userLabel="DeleteButton">
-                                                            <rect key="frame" x="119" y="8" width="45.333333333333485" height="41.333333333333371"/>
+                                                            <rect key="frame" x="99" y="8" width="45.333333333333485" height="41.333333333333371"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <color key="tintColor" red="0.79730902780000001" green="0.17227336230000001" blue="0.15661379959999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -937,31 +956,14 @@
                                                             </connections>
                                                         </button>
                                                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IXK-e2-ZZT" userLabel="FavoriteButton">
-                                                            <rect key="frame" x="2" y="114" width="45.333333333333485" height="41.333333333333371"/>
+                                                            <rect key="frame" x="10" y="118" width="30" height="34"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            <state key="normal" image="star" catalog="system">
-                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
-                                                            </state>
                                                             <state key="selected" image="star.fill" catalog="system">
                                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
                                                             </state>
                                                             <connections>
                                                                 <action selector="favoriteTapped:" destination="HHM-DK-cqs" eventType="touchUpInside" id="VCt-on-7hd"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I4L-6j-kY6" userLabel="ShareButton">
-                                                            <rect key="frame" x="120" y="116" width="46" height="40"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            <state key="normal" image="calendar.badge.plus" catalog="system">
-                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
-                                                            </state>
-                                                            <state key="selected" image="star.fill" catalog="system">
-                                                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="35"/>
-                                                            </state>
-                                                            <connections>
-                                                                <action selector="favoriteTapped:" destination="HHM-DK-cqs" eventType="touchUpInside" id="8gt-JG-xp7"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -1050,6 +1052,7 @@
                     <connections>
                         <outlet property="collectionView" destination="IwX-4q-0Bi" id="e0R-qa-ic1"/>
                         <outlet property="colorWell" destination="3Oh-w8-7L5" id="SUE-uY-vsJ"/>
+                        <outlet property="editButton" destination="JBP-Qg-FYg" id="LI6-dc-Umg"/>
                         <outlet property="emojiTextField" destination="2EZ-Sv-ir1" id="ieX-lp-9qY"/>
                         <outlet property="eventsButton" destination="JBP-Qg-FYg" id="mem-es-tIX"/>
                         <outlet property="groupImage" destination="fRh-AY-1KM" id="Bc0-kg-lpE"/>
@@ -1554,6 +1557,7 @@
                     <navigationItem key="navigationItem" title="Add Events" id="azS-gG-vCK">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="GYb-fR-kwZ"/>
                     </navigationItem>
+                    <nil key="simulatedTopBarMetrics"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eUC-31-LfH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

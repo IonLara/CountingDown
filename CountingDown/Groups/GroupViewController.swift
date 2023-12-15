@@ -24,6 +24,7 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var groupNameField: UITextField!
     @IBOutlet weak var emojiTextField: EmojiTextField!
+    @IBOutlet weak var editButton: UIButton!
     
     var imagePicker = UIImagePickerController()
     
@@ -114,6 +115,29 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
             if group.events.contains(event.id) {
                 contained.append(event)
             }
+        }
+    }
+    
+    @IBAction func EditToggle(_ sender: UIButton) {
+        if contained.count > 0 {
+            isEditing.toggle()
+        }
+    }
+    
+    
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            editButton.setTitle("Stop Editing", for: .normal)
+            
+        } else {
+            editButton.setTitle("Edit Events", for: .normal)
+            
+        }
+        collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
+            let cell = collectionView.cellForItem(at: indexPath) as! EventCollectionViewCell
+            cell.isEditing = isEditing
         }
     }
     
@@ -287,6 +311,19 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         return UICollectionViewCompositionalLayout(section: section)
     }
     
+    @objc func removeEvent(sender: UICollectionViewCell) {
+        let index = sender.tag - 1000
+        contained.remove(at: index)
+        group.events.remove(at: index)
+        delegate.updateGroup(groupIndex)
+        delegate.saveGroups()
+        
+        collectionView.reloadData()
+        if contained.count == 0 {
+            isEditing.toggle()
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfSections section: Int) -> Int {
         
         return 1
@@ -330,8 +367,8 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         cell.opacityView.layer.cornerRadius = 20
         cell.opacityView.clipsToBounds = true
         
-        //        cell.deleteButton.tag = indexPath.item + 1000
-        //        cell.deleteButton.addTarget(self, action: #selector(deleteEvent), for: .touchUpInside)
+        cell.deleteButton.tag = indexPath.item + 1000
+        cell.deleteButton.addTarget(self, action: #selector(removeEvent), for: .touchUpInside)
         
         
         //        cell.favoriteButton.tag = indexPath.item + 1000
