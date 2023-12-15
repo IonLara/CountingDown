@@ -16,11 +16,25 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
     
     func saveGroups() {
         Manager.saveGroups(groups)
+        collectionView.reloadData()
     }
     
     
     var groups = [Group]()
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//
+//        if let temp = Manager.loadEvents(){
+//            groups = temp
+//        } else {
+//            events = Manager.loadBaseEvents()
+//        }
+//        print("ViewDidAppear")
+//
+        Manager.saveGroups(groups)
+        collectionView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +46,7 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         } else {
             var temp = Group()
             temp.groupName = "Example Group"
-            temp.events = [0]
+            temp.events = []
             temp.members = [Manager.user!]
             temp.admins = [Manager.user!]
             groups = [temp]
@@ -77,6 +91,7 @@ class GroupCollectionViewController: UICollectionViewController, UICollectionVie
         
         cell.nameLabel.text = group.groupName
         cell.numberLabel.text = "\(group.events.count)"
+//        print("\(group.groupName) has \(group.events.count) events!")
         cell.remainderLabel.text = "Events"
         
         if !group.hasImage {

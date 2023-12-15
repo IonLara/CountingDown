@@ -33,7 +33,13 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     var groupIndex: Int!
     
     var events: [Event]!
-    var eventIndex = 0
+    var contained = [Event]()
+    
+    var bool: Bool!  {
+        didSet {
+            
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +92,7 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         store.requestAccess(to: .event, completion: { granted, error in
         })
         events = Manager.loadEvents()
+        getEvents()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -96,7 +103,18 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         } else {
             events = Manager.loadBaseEvents()
         }
+        print("ViewDidAppear")
+        
         collectionView.reloadData()
+    }
+    
+    func getEvents() {
+        contained.removeAll()
+        for event in events {
+            if group.events.contains(event.id) {
+                contained.append(event)
+            }
+        }
     }
     
     @IBAction func nameEditAccept(_ sender: UITextField) {
@@ -275,14 +293,14 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        group.events.count
+        contained.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EventCell", for: indexPath) as! EventCollectionViewCell
         
-        var event = events[group.events[indexPath.item]]
+        var event = contained[indexPath.item]
         
         cell.nameLabel.text = event.title
         let temp = getTime(event.date.timeIntervalSinceNow)
@@ -350,11 +368,12 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         guard let cell = sender as? UICollectionViewCell, let indexPath = collectionView.indexPath(for: cell) else {return detailView}
         let index = indexPath.item
         
-        let event = events[group.events[index]]
+        let event = contained[index]
         
         detailView?.event = event
         detailView?.delegate = self
-        detailView?.index = group.events[index]
+        detailView?.index = events.firstIndex(of: contained[index])
+//        detailView?.index = group.events[index]
         return detailView
     }
     
@@ -434,6 +453,16 @@ class GroupViewController: UIViewController, UICollectionViewDelegate, UICollect
         return true
     }
     
+    @IBSegueAction func AddEventSegue(_ coder: NSCoder, sender: Any?) -> AddEventCollectionViewController? {
+        let screen = AddEventCollectionViewController(coder: coder)
+        screen?.added = contained
+        screen?.group = group
+        screen?.groupView = self
+        return screen
+    }
+    @IBAction func AddEventPressed(_ sender: UIButton) {
+        print("Added")
+    }
     
     //    func eventCollectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     //

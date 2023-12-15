@@ -22,6 +22,7 @@ class EventCollectionViewController: UICollectionViewController, UICollectionVie
     
     let store = EKEventStore()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
